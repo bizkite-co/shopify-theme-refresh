@@ -1,0 +1,202 @@
+{% comment %}
+  ========
+  WARNING!
+  ========
+  Modifying this file can break Wholesale Gorilla or cause other unintended issues with your store.
+  If you need to modify this file please contact us first: support@wholesalegorilla.net
+{% endcomment %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    const style = document.getElementById('wsg-custom-style');
+    if (typeof window.isWsgCustomer != "undefined" && isWsgCustomer) {
+      style.innerHTML = `
+        ${style.innerHTML} 
+        /* A friend of hideWsg - this will _show_ only for wsg customers. Add class to an element to use */
+        .showWsg {
+          display: unset;
+        }
+        /* wholesale only CSS */
+        .additional-checkout-buttons, .shopify-payment-button {
+          display: none !important;
+        }
+        .wsg-proxy-container select {
+          background-color: 
+          ${
+        document.querySelector('input').style.backgroundColor
+          ? document.querySelector('input').style.backgroundColor
+          : 'white'
+        } !important;
+        }
+      `;
+    } else {
+      style.innerHTML = `
+        ${style.innerHTML}
+        /* Add CSS rules here for NOT wsg customers - great to hide elements from retail when we can't access the code driving the element */
+        
+      `;
+    }
+
+    if (typeof window.embedButtonBg !== undefined && typeof window.embedButtonText !== undefined && window.embedButtonBg !== window.embedButtonText) {
+      style.innerHTML = `
+        ${style.innerHTML}
+        .wsg-button-fix {
+          background: ${embedButtonBg} !important;
+          border-color: ${embedButtonBg} !important;
+          color: ${embedButtonText} !important;
+        }
+      `;
+    }
+
+    // =========================
+    //         CUSTOM JS
+    // ==========================
+    if (document.querySelector(".wsg-proxy-container")) {
+      initNodeObserver(wsgCustomJs);
+    }
+  })
+
+  function wsgCustomJs() {
+
+    // update button classes
+    const button = document.querySelectorAll(".wsg-button-fix");
+    let buttonClass = "xxButtonClassesHerexx";
+    buttonClass = buttonClass.split(" ");
+    for (let i = 0; i < button.length; i++) {
+      button[i].classList.add(... buttonClass);
+    }
+
+    // wsgCustomJs window placeholder
+    // update secondary btn color on proxy cart
+    if (document.getElementById("wsg-checkout-one")) {
+      const checkoutButton = document.getElementById("wsg-checkout-one");
+      let wsgBtnColor = window.getComputedStyle(checkoutButton).backgroundColor;
+      let wsgBtnBackground = "none";
+      let wsgBtnBorder = "thin solid " + wsgBtnColor;
+      let wsgBtnPadding = window.getComputedStyle(checkoutButton).padding;
+      let spofBtn = document.querySelectorAll(".spof-btn");
+      for (let i = 0; i < spofBtn.length; i++) {
+        spofBtn[i].style.background = wsgBtnBackground;
+        spofBtn[i].style.color = wsgBtnColor;
+        spofBtn[i].style.border = wsgBtnBorder;
+        spofBtn[i].style.padding = wsgBtnPadding;
+      }
+    }
+
+    // update Quick Order Form label
+    if (typeof window.embedSPOFLabel != "undefined" && embedSPOFLabel) {
+      document.querySelectorAll(".spof-btn").forEach(function(spofBtn) {
+        spofBtn.removeAttribute("data-translation-selector");
+        spofBtn.innerHTML = embedSPOFLabel;
+      });
+    }
+  }
+
+  function initNodeObserver(onChangeNodeCallback) {
+
+    // Select the node that will be observed for mutations
+    const targetNode = document.querySelector(".wsg-proxy-container");
+
+    // Options for the observer (which mutations to observe)
+    const config = {
+      attributes: true,
+      childList: true,
+      subtree: true
+    };
+
+    // Callback function to execute when mutations are observed
+    const callback = function(mutationsList, observer) {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          onChangeNodeCallback();
+          observer.disconnect();
+        }
+      }
+    };
+
+    // Create an observer instance linked to the callback function
+    const observer = new MutationObserver(callback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(targetNode, config);
+  }
+</script>
+
+{% comment %}
+  Styles that sometimes need customization per theme.
+{% endcomment %}
+<style id="wsg-custom-style">
+  /* A friend of hideWsg - this will _show_ only for wsg customers. Add class to an element to use */
+  .showWsg {
+    display: none;
+  }
+  /* Signup/login */
+  #wsg-signup select,
+  #wsg-signup input,
+  #wsg-signup textarea {
+    height: 46px;
+    border: thin solid #d1d1d1;
+    padding: 6px 10px;
+  }
+  #wsg-signup textarea {
+    min-height: 100px;
+  }
+  .wsg-login-input {
+    height: 46px;
+    border: thin solid #d1d1d1;
+    padding: 6px 10px;
+  }
+  #wsg-signup select {
+  }
+/*   Quick Order Form */
+  .wsg-table td {
+    border: none;
+    min-width: 150px;
+  }
+  .wsg-table tr {
+    border-bottom: thin solid #d1d1d1; 
+    border-left: none;
+  }
+  .wsg-table input[type="number"] {
+    border: thin solid #d1d1d1;
+    padding: 5px 15px;
+    min-height: 42px;
+  }
+  #wsg-spof-link a {
+    text-decoration: inherit;
+    color: inherit;
+  }
+  .wsg-proxy-container {
+    margin-top: 0% !important;
+  }
+  @media screen and (max-width:768px){
+    .wsg-proxy-container .wsg-table input[type="number"] {
+        max-width: 80%; 
+    }
+    .wsg-center img {
+      width: 50px !important;
+    }
+    .wsg-variant-price-area {
+      min-width: 70px !important;
+    }
+  }
+  /* Submit button */
+  #wsg-cart-update{
+    padding: 8px 10px;
+    min-height: 45px;
+    max-width: 100% !important;
+  }
+  .wsg-table {
+    background: inherit !important;
+  }
+  .wsg-spof-container-main {
+    background: inherit !important;
+  }
+  /* General fixes */
+  .wsg-hide-prices {
+    opacity: 0;
+  }
+  .wsg-ws-only .button {
+    margin: 0;
+  }
+</style>

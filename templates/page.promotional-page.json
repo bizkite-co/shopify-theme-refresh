@@ -1,0 +1,193 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "a9ef1d70-7dde-4db5-b97f-3d545f2a6c81": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--15357071163453__a9ef1d70-7dde-4db5-b97f-3d545f2a6c81-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Our Black Friday Sale Ends Today!",
+            "heading_size": "h1"
+          }
+        },
+        "template--15357071163453__a9ef1d70-7dde-4db5-b97f-3d545f2a6c81-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>It's your last chance to get the biggest deals of the year at Turbo Heat Welding Tools! Save up to $1,000 on the tools that help you install high-quality floors faster.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "template--15357071163453__a9ef1d70-7dde-4db5-b97f-3d545f2a6c81-heading-1",
+        "template--15357071163453__a9ef1d70-7dde-4db5-b97f-3d545f2a6c81-text-1"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/SantaBlackFriday2024-2.png",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "background-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "d51b2083-ce5c-4b20-9847-8ef290883d9a": {
+      "type": "multirow",
+      "blocks": {
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-1": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/chiquita-hero3.png",
+            "caption": "On Sale for $3900",
+            "heading": "Chiquita Automatic Heat Welder",
+            "text": "<p>The Chiquita allows you to heat weld long seams automatically with precision. Freeing you up to groove the next seam, shave the welding rod or just enjoy your coffee.</p>",
+            "button_label": "Save $1000 on The Chiquita",
+            "button_link": "shopify://products/chiquita-and-turbo-splicer"
+          }
+        },
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-2": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Master_Turbo_Groover_2.jpg",
+            "caption": "On Sale for $950",
+            "heading": "Master Turbo Groover",
+            "text": "<p>Our Master Turbo Groover is the ultimate tool for precision grooving. It grooves as fast as you can go, grooves from wall to wall and easily cuts circles and shapes evenly. </p>",
+            "button_label": "Save $750 on Master Turbo Groovers",
+            "button_link": "shopify://products/master-turbo-groover"
+          }
+        },
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-3": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Marmo_Groovers_2.JPG",
+            "caption": "On Sale for $1500",
+            "heading": "Turbo Marmo Groovers",
+            "text": "<p>Specially designed for marmoleum, linoleum, and all other sheet flooring materials, the Turbo Marmo Groovers come in a set of two and allow installers to cut in circles and curves. Like all of our groovers, it produces no dust, debris, noise or smoke compared to electric groovers.</p>",
+            "button_label": "Save $700 on Turbo Marmo Groovers",
+            "button_link": "shopify://products/turbo-marmo-groover-set"
+          }
+        },
+        "e9a16474-5114-41f5-b6aa-b3af030ba52d": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Sports-Groover-5.jpg",
+            "caption": "On Sale for $1200",
+            "heading": "Sports Turbo Groover",
+            "text": "<p>Optimized for the installation of sports flooring in gyms and arenas, the Sports Turbo Groover is the perfect tool to prepare sports floor flooring for a waterproof heat weld.</p>",
+            "button_label": "Save $300 on Sports Turbo Groovers",
+            "button_link": "shopify://products/sports-turbo-groover"
+          }
+        },
+        "9910b64f-66c3-4104-ae48-704ad09efaba": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Universal_Nozzle_6.jpg",
+            "caption": "On Sale for $350",
+            "heading": "Universal Turbo Nozzle",
+            "text": "<p>Meet the perfect nozzle for heat welding. The patented Universal Turbo Nozzle heat welds by directing hot air precisely were the welding rod meets the groove. For a strong heat weld bond without scorching the flooring material.</p>",
+            "button_label": "Save $150 on Universal Turbo Nozzles",
+            "button_link": "https://turboheatweldingtools.com/products/universal-turbo-nozzle-1"
+          }
+        },
+        "8a57bed2-3f69-4099-9090-9e137afb5797": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0101-300x300.jpg",
+            "caption": "On Sale for $2200",
+            "heading": "Supreme Turbo Kit",
+            "text": "<p>Featuring the Turbo Groover, our Supreme Turbo Kit gives installers a complete set of Turbo tools to start heat welding like a pro. Best for heat welding safety flooring at an affordable price. </p>",
+            "button_label": "Save $300 on Supreme Turbo Kits",
+            "button_link": "shopify://products/supreme-turbo-kit"
+          }
+        },
+        "db4752b0-8c97-4c69-923f-e75e9c53eb59": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0120-300x300.jpg",
+            "caption": "On Sale for $3300",
+            "heading": "Turbo Marmo Kit",
+            "text": "<p>Featuring a set of Turbo Marmo Groovers, the Turbo Marmo kit gives you everything you need to heat weld <strong>ALL flooring materials with top quality results.</strong></p>",
+            "button_label": "Save $300 on Turbo Marmo Kits",
+            "button_link": "shopify://products/turbo-marmo-kit"
+          }
+        },
+        "b45c072f-232c-4513-a46b-e79d06d0e306": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0110-300x300.jpg",
+            "caption": "On Sale for $2900",
+            "heading": "Master Turbo Kit",
+            "text": "<p>Featuring the Master Turbo Groover, this kit gives installers everything they need to heat weld jobs quickly and take on complicated jobs with ease.</p>",
+            "button_label": "Save $300 on Master Turbo Kits",
+            "button_link": "shopify://products/master-turbo-kit"
+          }
+        },
+        "row_bTrBD6": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/TSK2.png",
+            "caption": "On Sale for $5000",
+            "heading": "TSK Tarkett Sports Kit",
+            "text": "<p>The TSK is the perfect combo for installers of sports floors. It gives you time to properly groove materials with every stroke as the Chiquita takes care of welding long runs smoothly.</p>",
+            "button_label": "Save $1000 on TSK Tarkett Sports Kit",
+            "button_link": "shopify://products/tsk-tarkett-sports-kit"
+          }
+        }
+      },
+      "block_order": [
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-1",
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-2",
+        "template--15357071163453__d51b2083-ce5c-4b20-9847-8ef290883d9a-row-3",
+        "e9a16474-5114-41f5-b6aa-b3af030ba52d",
+        "9910b64f-66c3-4104-ae48-704ad09efaba",
+        "8a57bed2-3f69-4099-9090-9e137afb5797",
+        "db4752b0-8c97-4c69-923f-e75e9c53eb59",
+        "b45c072f-232c-4513-a46b-e79d06d0e306",
+        "row_bTrBD6"
+      ],
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "image_layout": "alternate-left",
+        "section_color_scheme": "background-1",
+        "row_color_scheme": "background-1",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "a9ef1d70-7dde-4db5-b97f-3d545f2a6c81",
+    "d51b2083-ce5c-4b20-9847-8ef290883d9a"
+  ]
+}

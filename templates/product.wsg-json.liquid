@@ -1,0 +1,41 @@
+{% layout none %}
+
+{% assign product_handle = canonical_url | split: '/' | last %}    
+{% capture handle_decoded %}{{ product_handle | url_decode }}{% endcapture %}
+
+{
+"handle": "{{ handle_decoded }}",
+"collectionIds": [
+{% for collection in all_products[handle_decoded].collections %}
+{{ collection.id }}{%- if forloop.last == false -%},{% endif %}
+{% endfor %}
+],
+"id": {{ all_products[handle_decoded].id}},
+"productPrice": {{ all_products[handle_decoded].price}},
+"variants": [
+{% for variant in all_products[handle_decoded].variants %}
+{
+"id": "{{ variant.id}}",
+"available": "{{variant.available}}",
+"title": {{variant.title | json}},
+"option1": {{variant.option1 | json}},
+"option2": {{variant.option2 | json}},
+"option3": {{variant.option3 | json}},
+"price": {{variant.price}},
+"public_title": {{variant.title | json}},
+"sku": {{variant.sku | json}},
+"taxable": "{{variant.taxable}}"{% if variant.unit_price_measurement %},
+"unit_price_measurement": {
+"measured_type": {{ variant.unit_price_measurement.measured_type | json }},
+"quantity_value": {{ variant.unit_price_measurement.quantity_value | json }},
+"quantity_unit": {{ variant.unit_price_measurement.quantity_unit | json }},
+"reference_unit": {{ variant.unit_price_measurement.reference_unit | json }},
+"reference_value": {{ variant.unit_price_measurement.reference_value | json }}
+}
+{% endif %}
+
+}{% if forloop.last == false %},{% endif %}
+{% endfor %}],
+"productTags":  {{ all_products[handle_decoded].tags | json }}, 
+"productOptions": {{product.options | json }}
+}

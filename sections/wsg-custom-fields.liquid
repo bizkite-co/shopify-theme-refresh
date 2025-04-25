@@ -1,0 +1,635 @@
+{% comment %}
+===============================
+Modifying this file directly can cause problems with Wholesale Gorilla, and is not recommended.  
+Do not delete unless Wholesale Gorilla has been uninstalled.
+===============================
+{% endcomment %}
+<div id="custom-fields">
+  {% for block in section.blocks %}
+  {% case block.type %}
+    {% comment %} Text field block {% endcomment %}
+    {% when 'text_block' %}
+      <div class="grid__item medium-up--one-half" {{ block.shopify_attributes }}>
+        <label id="{{'customField_' | append: block.settings.text_input | md5 }}_label"
+        for="wsg-custom-field_{{'customField_' | append: block.settings.text_input | md5 }}">
+          {{ block.settings.text_input }}
+        </label>
+        <label
+          id="{{ 'customField_' | append: block.settings.text_input | md5}}_label_error"
+          for="{{ block.settings.text_input }}"
+          class='wsg-hidden-label wsg-label-error'
+          data-translation-selector="labelRequired"
+        >
+          Required
+        </label>
+        <input
+          name="customField_{{ block.settings.text_input }}"
+          id="wsg-custom-field_{{'customField_' | append: block.settings.text_input | md5 }}"
+          type="text"
+          value=""
+          placeholder="{{ block.settings.text_input }}"
+          class="full-width"
+          {% if block.settings.isRequired == true %}
+            required
+          {% endif %} />
+        </div>
+    {% comment %} Phone number field block {% endcomment %}
+    {% when 'phone_block' %}
+      <div class="grid__item medium-up--one-half" {{ block.shopify_attributes }}>
+        <label id="{{ 'customField_' | append: block.settings.phone_text_input | md5 }}_label"
+        for="phone"
+        data-translation-selector="labelPhone">
+          {{ block.settings.phone_text_input }}
+        </label>
+        <label
+          id="{{ 'customField_' | append: block.settings.phone_text_input | md5 }}_label_error"
+          for="{{ block.settings.phone_text_input }}"
+          class='wsg-hidden-label wsg-label-error'
+          data-translation-selector="labelRequired"
+        >Required</label>
+        <input
+          id="phone"
+          name="customField_{{ block.settings.phone_text_input }}"
+          value=""
+          type="text"
+          pattern="[0-9\-]*"
+          placeholder="{{ block.settings.phone_text_input }}"
+          data-translation-selector="placePhone"
+          class="full-width"
+          {% if block.settings.isRequired == true %}
+            required
+          {% endif %} />
+      </div>
+    {% comment %} Textarea block {% endcomment %}
+    {% when 'textarea_block' %}
+       <div class="grid__item full-width-block" {{ block.shopify_attributes }}>
+          <label id="{{ 'customField_' | append: block.settings.textarea_label | md5 }}_label"
+          for="wsg-custom-field_{{ 'customField_' | append: block.settings.textarea_label | md5 }}">
+            {{ block.settings.textarea_label }}
+          </label>
+          <label
+            id="{{ 'customField_' | append: block.settings.textarea_label | md5 }}_label_error" 
+            for="{{ block.settings.textarea }}"
+            class='wsg-hidden-label wsg-label-error'
+            data-translation-selector="labelRequired"
+          >
+            Required
+          </label>
+          <textarea
+            name="customField_{{ block.settings.textarea_label }}"
+            id="wsg-custom-field_{{ 'customField_' | append: block.settings.textarea_label | md5 }}"
+            value=""
+            placeholder="{{ block.settings.textarea_placeholder }}"
+            class="full-width"
+            {% if block.settings.isRequired == true %}
+              required
+            {% endif %}></textarea>
+       </div>
+    {% comment %} Terms field block {% endcomment %}
+    {% when 'terms_block' %}
+      <div class="grid__item full-width-block" {{ block.shopify_attributes }}>
+        <div style="display: flex; align-items: center;">
+          <input
+            id="terms"
+            type="checkbox"
+            name="terms"
+            value=""
+            required />
+         	<label id="terms_label" for="terms" class="richtext-label" data-translation-selector="termsAndConditions">{{ block.settings.terms }}</label>
+        </div>
+      </div>
+    {% comment %} Marketing field block {% endcomment %}
+    {% when 'marketing_opt_in_block' %}
+      <div class="grid__item full-width-block" {{ block.shopify_attributes }}>
+        <div style="display: flex; align-items: center;">
+          <input
+            type="checkbox"
+            id="marketing_opt_in"
+            name="marketing_opt_in"
+            value=""
+            {% if block.settings.isRequired == true %}
+              required
+            {% endif %} />
+          <label id="marketing_opt_in_label" for="marketing_opt_in" class="richtext-label">
+            {{ block.settings.marketing_opt_in }}
+          </label>
+        </div>
+      </div>
+    {% comment %} Upload file block {% endcomment %}
+    {% when 'upload_file_block' %}
+      <div class="grid__item full-width-block" {{ block.shopify_attributes }}>
+        <div style="display: flex; align-items: center; flex-direction: column">
+        <div class="upload_file_description">{{ block.settings.upload_file_description }}</div>
+        <input
+          data-translation-selector="uploadFile"
+          id="file-upload-button"
+          type='button'
+          value="{{ block.settings.text_input }}"
+               style="cursor: pointer; 
+                      {% if block.settings.button_border_color != blank  %} 
+                      	border: 1px solid {{ block.settings.button_border_color }};
+                      {% endif %} 
+                      background-color: {{ block.settings.button_color }}; 
+                      color: {{ block.settings.button_text_color }}"/>
+          <input
+            hidden
+            accept="text/plain,.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/*,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            id="file"
+            name="files"
+            type="file"
+            value=""
+            class="full-width"
+            placeholder="{{ block.settings.text_input }}"
+            multiple
+            {% if block.settings.isRequired == true %}
+              required
+            {% endif %}/>
+          <span id="file_label" data-translation-selector="fileUploadLabel">No file selected</span>
+        </div>
+      </div>
+    {% comment %} Company field block {% endcomment %}
+    {% when 'company_block' %}
+      <div class="grid__item medium-up--one-half" {{ block.shopify_attributes }}>
+        <label id="company_label" for="company" data-translation-selector="companyName">
+          {{ block.settings.company }}
+        </label>
+        <label
+          id="company_label_error"
+          for="{{ block.settings.company }}"
+          class='wsg-hidden-label wsg-label-error'
+          data-translation-selector="labelRequired"
+        >
+          Required
+        </label>
+        <input
+          id="company"
+          name="company"
+          type="text"
+          value=""
+          data-translation-selector="companyName"
+          placeholder="{{ block.settings.company }}"
+          class="full-width"
+          {% if block.settings.isRequired == true %}
+            required
+          {% endif %} />
+        </div>
+    {% comment %} Dropdown block {% endcomment %}
+    {% when 'dropdown_block' %}
+      <div class="grid__item medium-up--one-half" {{ block.shopify_attributes }}>
+        <label id="dropdown_label" for="dropdown" data-translation-selector="selectOption">
+          {{ block.settings.dropdown_label }}
+        </label>
+        <select name="customField_{{ block.settings.dropdown_label }}" id="dropdown" class="noreplace">
+          {% if block.settings.dropdown_option_1 != blank %}<option value="{{ block.settings.dropdown_option_1 }}">{{ block.settings.dropdown_option_1 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_2 != blank %}<option value="{{ block.settings.dropdown_option_2 }}">{{ block.settings.dropdown_option_2 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_3 != blank %}<option value="{{ block.settings.dropdown_option_3 }}">{{ block.settings.dropdown_option_3 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_4 != blank %}<option value="{{ block.settings.dropdown_option_4 }}">{{ block.settings.dropdown_option_4 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_5 != blank %}<option value="{{ block.settings.dropdown_option_5 }}">{{ block.settings.dropdown_option_5 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_6 != blank %}<option value="{{ block.settings.dropdown_option_6 }}">{{ block.settings.dropdown_option_6 }}</option>{% endif %}
+          {% if block.settings.dropdown_option_7 != blank %}<option value="{{ block.settings.dropdown_option_7 }}">{{ block.settings.dropdown_option_7 }}</option>{% endif %}
+        </select>
+      </div>
+  {% endcase %}
+
+  {% endfor %}
+</div>
+
+<style>
+  #custom-fields {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    justify-content: space-between;
+    gap: 4%;
+  }
+
+  .wsg-two-column{
+    overflow: auto !important;
+  }
+
+  .wsg-element-margin-top{
+    margin-top: 15px !important;
+    display: inline-block;
+  }
+
+  #custom-fields .grid__item {
+    margin-bottom: 9px;
+    padding: 0;
+  }
+
+  #custom-fields .medium-up--one-half {
+    width: 48%;
+    max-width: 48%;
+  }
+
+  #custom-fields .grid__item input[type="checkbox"] {
+    padding: 0 10px;
+    height: auto;
+  }
+
+  #file {
+    display: none;
+  }
+
+  .full-width-block {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 0 !important;
+  }
+
+  .richtext-label {
+    margin-left: 10px;
+  }
+
+  .richtext-label {
+    margin-bottom: 0
+  }
+
+  .richtext-label p {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .upload_file_description {
+    width: 100%;
+  }
+
+  .upload_file_description > p {
+    margin-bottom: 5px;
+  }
+
+  #file_label {
+    text-align: center;
+  }
+
+  @media only screen and (max-width: 750px) {
+    #custom-fields .medium-up--one-half,
+    #custom-fields .full-width-block {
+      width: 100%;
+      max-width: 100%;
+    }
+    
+  }
+</style>
+
+<script>
+  document.querySelector('#wsg-signup').addEventListener('click', (e) => {
+    if (e.target.closest('#wsg-signup #file-upload-button')) {
+      const file = document.querySelector('#file');
+      file.click();
+    }
+  });
+
+  document.querySelector('#wsg-signup').addEventListener('change', (e) => {
+    if (e.target.closest('#wsg-signup #file')) {
+      const label = document.getElementById("file_label");
+      const defaultLabelText = (
+        wsgData.translations.language !== 'english'
+        && wsgData.translations.enable
+        && wsgData.translations.languageJson
+      )
+        ? wsgData.translations.languageJson.text.signupLoginReset.fileUploadLabel
+        : 'No file selected';
+
+      const files = e.target.files;
+      let fullLable = '';
+      Array.from(files).forEach(file => { 
+        if (fullLable) {
+          return file && file.name ? fullLable = fullLable + ', ' + file.name : fullLable
+        } else {
+          return file && file.name ? fullLable += file.name : fullLable
+        }
+        
+      });
+
+      label.textContent = fullLable ? fullLable : defaultLabelText;
+    }
+  });
+
+  var marketingOptIn = document.querySelector('#wsg-signup #marketing_opt_in');
+  if (marketingOptIn) {
+  document.querySelector('#wsg-signup').addEventListener('input', (e) => {
+    if (marketingOptIn.checked == true) {
+        marketingOptIn.setAttribute('value', true);
+      } else {
+        marketingOptIn.setAttribute('value', '');
+      }
+  });
+  }
+
+  var terms = document.querySelector('#wsg-signup #terms');
+  if (terms) {
+    document.querySelector('#wsg-signup').addEventListener('input', (e) => {
+      if (terms.checked == true){
+        terms.setAttribute('value', true);
+      } else {
+        terms.setAttribute('value', '');
+      }
+    });
+  }
+
+  // next step, we need to remove data-translation-selector attr if the text of the element is not default
+  const termsAndConditionsElement = document.querySelector('[data-translation-selector="termsAndConditions"]');
+  const uploadFileElement = document.querySelector('[data-translation-selector="uploadFile"]');
+  const companyNameElement = document.querySelector('[data-translation-selector="companyName"]');
+  const selectOptionElement = document.querySelector('[data-translation-selector="selectOption"]');
+  const phoneElement = document.querySelector('[data-translation-selector="labelPhone"]');
+
+  const websiteElement = document.querySelector('[name="customField_Website"]');
+  const taxElement = document.querySelector('[name="customField_Tax ID/ABN/VAT Number"]');
+  const noteElement = document.querySelector('[name="customField_Note"]');
+
+  if (
+    termsAndConditionsElement &&
+    termsAndConditionsElement.textContent.trim() !== 'I accept the Terms and Conditions for this shop'
+  ) {
+    termsAndConditionsElement.removeAttribute('data-translation-selector');
+  }
+
+  if (uploadFileElement && uploadFileElement.value.trim() !== 'Upload File') {
+    uploadFileElement.removeAttribute('data-translation-selector');
+  }
+
+  if (companyNameElement && companyNameElement.textContent.trim() !== 'Company Name') {
+    const companyNameElements = document.querySelectorAll('[data-translation-selector="companyName"]');
+    companyNameElements.forEach(element => {
+      element.removeAttribute('data-translation-selector');
+    });
+  }
+
+  if (selectOptionElement && selectOptionElement.textContent.trim() !== 'Select an option') {
+    selectOptionElement.removeAttribute('data-translation-selector');
+  }
+
+  if (phoneElement && phoneElement.textContent.trim() !== 'Phone Number') {
+    phoneElement.removeAttribute('data-translation-selector');
+  }
+
+  if (websiteElement) {
+    websiteElement.setAttribute('data-translation-selector', 'placeWebsite');
+    websiteElement.parentElement.children[0].setAttribute('data-translation-selector', 'labelWebsite');
+  }
+
+  if (taxElement) {
+    taxElement.setAttribute('data-translation-selector', 'placeTaxId');
+    taxElement.parentElement.children[0].setAttribute('data-translation-selector', 'labelTaxId');
+  }
+
+  if (noteElement) {
+    noteElement.setAttribute('data-translation-selector', 'placeNotes');
+    noteElement.parentElement.children[0].setAttribute('data-translation-selector', 'labelNotes');
+  }
+
+</script>
+
+{% schema %}
+{
+  "name": "Custom Fields",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Text Input",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a single-line text input to the form."
+        },
+        {
+          "type": "text",
+          "id": "text_input",
+          "label": "Field Label",
+          "default": "Custom Wholesale Form Field"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to enter text into this input in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "phone_block",
+      "limit": 1,
+      "name": "Phone",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a phone number input to the registration form. Requires the user to enter a valid phone number into this field."
+        },
+        {
+          "type": "text",
+          "id": "phone_text_input",
+          "label": "Field Label",
+          "default": "Custom Wholesale Form Field"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to enter a phone number into this input in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "textarea_block",
+      "name": "Multi-line text area",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a multi-line or text-area input to the registration form."
+        },
+        {
+          "type": "text",
+          "id": "textarea_label",
+          "label": "Field label",
+          "default": "Custom Wholesale Form Field"
+        },
+        {
+          "type": "text",
+          "id": "textarea_placeholder",
+          "label": "Placeholder",
+          "default": "Custom Wholesale Form Field"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to enter text into this input in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "terms_block",
+      "limit": 1,
+      "name": "Terms & Conditions",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Adds a terms and conditions checkbox to the registration form. Users will be required to check this box in order to submit the form."
+        },
+        {
+          "type": "richtext",
+          "id": "terms",
+          "label": "Terms & Conditions Text",
+          "default": "<p>I accept the Terms and Conditions for this shop</p>"
+        }
+      ]
+    },
+    {
+      "type": "marketing_opt_in_block",
+      "limit": 1,
+      "name": "Marketing Opt-in",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a checkbox to the form that allows a user to select their marketing preferences. If a user checks this box the 'Email Marketing Status' in their customer profile in Shopify will be set to: 'Customer agreed to receive marketing emails.'"
+        },
+        {
+          "type": "richtext",
+          "id": "marketing_opt_in",
+          "label": "Marketing Opt-in text",
+          "default": "<p>Custom Wholesale Form Field</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to opt-in to marketing in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "upload_file_block",
+      "limit": 1,
+      "name": "Upload File",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a file upload feature to the registration form.  Uploaded files can be retrieved by opening Wholesale Gorilla in your Shopify admin and clicking on the Customers section."
+        },
+        {
+          "type": "richtext",
+          "id": "upload_file_description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "text_input",
+          "label": "Button Label",
+          "default": "Upload File"
+        },
+        {
+          "type": "color",
+          "id": "button_color",
+          "label": "Button color"
+        },
+        {
+          "type": "color",
+          "id": "button_border_color",
+          "label": "Button border color"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "default": "#000000",
+          "label": "Button text color"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to upload a file in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "company_block",
+      "limit": 1,
+      "name": "Company",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Capture the company name and add it to the customer's default address."
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "Company Name",
+          "default": "Company Name"
+        },
+        {
+          "type": "checkbox",
+          "id": "isRequired",
+          "label": "Required",
+          "default": false,
+          "info" : "Checking this box will require users to enter text into this input in order to submit the registration form."
+        }
+      ]
+    },
+    {
+      "type": "dropdown_block",
+      "limit": 1,
+      "name": "Select dropdown",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a select dropdown to your registration form. The selection will appear in the Notes section of the customer object."
+        },
+        {
+          "type": "text",
+          "id": "dropdown_label",
+          "label": "Select an option",
+          "default": "Select an option"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_1",
+          "label": "Option 1"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_2",
+          "label": "Option 2"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_3",
+          "label": "Option 3"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_4",
+          "label": "Option 4"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_5",
+          "label": "Option 5"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_6",
+          "label": "Option 6"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_7",
+          "label": "Option 7"
+        }
+      ]
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

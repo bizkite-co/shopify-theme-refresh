@@ -1,0 +1,75 @@
+{% comment %}
+===============================
+Modifying this file directly can cause problems with Wholesale Gorilla, and is not recommended.  
+Do not delete unless Wholesale Gorilla has been uninstalled.
+===============================
+{% endcomment %}
+<div class="wsg-one-half wsg-center">
+    <h1 data-translation-selector="applyH1">{{ section.settings.page-title }}</h1>
+    <div data-translation-selector="applyForWholesaleAccount">{{ section.settings.description }}</div>
+    {% if section.settings.image != blank %}
+    <div class="registration-form-img-container">
+      <img src="{{ section.settings.image | img_url: '' }}" />
+    </div>
+    {% endif %}
+    {{ section.settings.custom-html }}
+    <hr class='wsg-one-third wsg-element-margin'>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const titleElement = document.querySelector('[data-translation-selector="applyH1"]');
+    const descriptionElement = document.querySelector('[data-translation-selector="applyForWholesaleAccount"]');
+
+    // Check if the title element exists and its text content is not default
+    // we need to remove data-translation-selector attr
+    if (titleElement && titleElement.textContent !== 'Apply for a Wholesale Account') {
+      titleElement.removeAttribute('data-translation-selector');
+    }
+
+    // Check if the descriptio element exists and its text content is not default
+    // we need to remove data-translation-selector attr
+    if (descriptionElement && descriptionElement.textContent !== 'Use this form to apply for a wholesale account.') {
+      descriptionElement.removeAttribute('data-translation-selector');
+    }
+  });
+</script>
+
+<style>
+  .registration-form-img-container img {
+    width: 100% !important;
+    object-fit: cover;
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "WSG Registration Settings",
+    "limit": 1,
+    "settings": [
+      {
+        "id": "page-title",
+        "type": "text",
+        "label": "Page Title",
+        "default": "Apply for a Wholesale Account"
+      },
+      {
+        "id": "description",
+        "type": "richtext",
+        "label": "Description",
+        "default": "<p>Use this form to apply for a wholesale account.</p>"
+      },
+      {
+        "id": "image",
+        "type": "image_picker",
+        "label": "Image"
+      },
+      {
+        "id": "custom-html",
+        "type": "html",
+        "label": "Custom HTML",
+        "info" : "Advanced users only. Add html to the page."
+      }
+    ]
+  }
+{% endschema %}

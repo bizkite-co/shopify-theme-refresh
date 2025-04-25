@@ -1,0 +1,187 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "The Best Flooring Tools Money Can Buy. At Prices You Can Be Thankful For.",
+            "heading_size": "h1"
+          }
+        },
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We're offering discounts on a variety of our flooring tools including our bundled packages. Check them out below and be sure to check out our <a href=\"https://www.youtube.com/watch?v=O-RafFwARN8\" target=\"_blank\" title=\"An Introduction to Turbo Heat Welding Tools\">YouTube</a> channel to learn what sets our tools above the rest.</p>",
+            "text_style": "body"
+          }
+        },
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-button-1": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-heading-1",
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-text-1",
+        "template--15196642312253__0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a-button-1"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/Black_Friday._Instagram_post.-1.png",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "background-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "main": {
+      "type": "main-404",
+      "disabled": true,
+      "settings": {}
+    },
+    "2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7": {
+      "type": "multirow",
+      "blocks": {
+        "e6f26fd8-4200-4022-afc7-5a48ed2ea698": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/chiquita-hero3.png",
+            "caption": "Save $700. Total Price @ $3900",
+            "heading": "Chiquita Automatic Heat Welder",
+            "text": "<p>Our powered roller guides turn your standard heat welding gun into a tool that can precisely weld seams along long segments of material.</p>",
+            "button_label": "Save Big on Chiquitas",
+            "button_link": "shopify://products/chiquita-and-turbo-splicer"
+          }
+        },
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-1": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Master_Turbo_Groover_2.jpg",
+            "caption": "Buy One Get One Free",
+            "heading": "Master Turbo Groover",
+            "text": "<p>Offering the highest amount of precision available for professional grooving tools, the Master Turbo Groover allows installers to adjust the size of their grooves, cut material in various shapes and have scrap eject from its convenient side port making it easiest to groove to </p>",
+            "button_label": "Button label",
+            "button_link": "shopify://products/master-turbo-groover"
+          }
+        },
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-2": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Marmo_Groovers_2.JPG",
+            "caption": "Save $700. Total Price @ $1500",
+            "heading": "Marmo Groover Set",
+            "text": "<p>The fastest way to groove flooring material and it does it all without any electricity. None of the noise, dust, debris or potential overheating issues from electric groovers either.</p>",
+            "button_label": "Button label",
+            "button_link": ""
+          }
+        },
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-3": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Sports-Groover-5.jpg",
+            "caption": "Save $300. Total Price @ $1200",
+            "heading": "Sports Turbo Groover",
+            "text": "<p>Optimized for sports flooring installations, the Sports Turbo Groover outperforms electric groovers despite its manual operation. None of the noise, dust, debris or potential overheating issues from electric groovers either.</p>",
+            "button_label": "Save Big on Sports Turbo Groovers",
+            "button_link": "shopify://products/sports-turbo-groover"
+          }
+        },
+        "a7322b7c-a810-4bfa-b6b2-aa5167645bd7": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Universal_Nozzle.JPG",
+            "caption": "Save $150. Total Price @ $350",
+            "heading": "Universal Turbo Nozzle",
+            "text": "<p>Our heat gun nozzle allows you to either manually or automatically feed welding material perfectly into grooves to create consistent welds.</p>",
+            "button_label": "Save Big on Universal Turbo Nozzles",
+            "button_link": "shopify://products/universal-turbo-nozzle-1"
+          }
+        },
+        "f67cf5fc-051b-4172-8d17-fa35e43de32b": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0101-300x300.jpg",
+            "caption": "Save $300. Total Price @ $2200",
+            "heading": "Supreme Turbo Kit",
+            "text": "<p>Featuring the Turbo Groover, the Supreme Turbo Kit offers installers a complete set of Turbo Heat Welding Tools that provide consistent welds at its most affordable price.</p>",
+            "button_label": "Save Big on Supreme Turbo Kits",
+            "button_link": "shopify://products/supreme-turbo-kit"
+          }
+        },
+        "9d949411-4b05-4755-bdc7-f09d3a894786": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0120-300x300.jpg",
+            "caption": "Save $300. Total Price @ $3300",
+            "heading": "Turbo Marmo Kit",
+            "text": "<p>Featuring a set of Turbo Marmo Groovers, this kit gives installers a complete set of Turbo Heat Welding Tools suited for marmoleum, linoleum and all other sheet flooring available. Great for small teams.</p>",
+            "button_label": "Save Big on Turbo Marmo Kits",
+            "button_link": "shopify://products/turbo-marmo-kit"
+          }
+        },
+        "cef15110-873b-4887-b59a-4bb0b06956e0": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/PICT0101-300x300.jpg",
+            "caption": "Save $300. Total Price @ $3000",
+            "heading": "Master Turbo Kit",
+            "text": "<p>Featuring the Master Turbo Groover, this kit works great for installers looking to offer their clients precision work. Groove various shapes and widths while keeping the depth even over floor bumps.</p>",
+            "button_label": "Save Big on Master Turbo Kits",
+            "button_link": "shopify://products/master-turbo-kit"
+          }
+        }
+      },
+      "block_order": [
+        "e6f26fd8-4200-4022-afc7-5a48ed2ea698",
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-1",
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-2",
+        "template--15196642312253__2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7-row-3",
+        "a7322b7c-a810-4bfa-b6b2-aa5167645bd7",
+        "f67cf5fc-051b-4172-8d17-fa35e43de32b",
+        "9d949411-4b05-4755-bdc7-f09d3a894786",
+        "cef15110-873b-4887-b59a-4bb0b06956e0"
+      ],
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "image_layout": "alternate-left",
+        "section_color_scheme": "background-1",
+        "row_color_scheme": "background-1",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "0b6d9be2-9c05-4adb-93a4-0bbda1da4c5a",
+    "main",
+    "2a6bb686-7ea1-48bd-a8fc-0d9cdec370f7"
+  ]
+}

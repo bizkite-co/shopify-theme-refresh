@@ -1,0 +1,331 @@
+{% comment %}
+===============================
+Modifying this file directly can cause problems with Wholesale Gorilla, and is not recommended.  
+Do not delete unless Wholesale Gorilla has been uninstalled.
+===============================
+{% endcomment %}
+
+{% render 'wsg-custom' %}
+
+<script type='text/javascript'>
+  wsgRunSignupV2 = true;
+  wsgRunProxy = true;
+  //redirect if customer is already logged in
+  var wsgCustomerData = {{customer | json}}
+  if (wsgCustomerData) {
+    window.location.href ="{{ routes.account_url }}"
+  }
+</script>
+
+{% assign GOOGLE_RECAPTCHA_SITE_KEY = '6LdGUcIUAAAAAPQWiZiIv3yxc3-na0ruvSWo1ing' %}
+
+<!-- reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js?render={{ GOOGLE_RECAPTCHA_SITE_KEY }}"></script>
+
+<div id="wsg-signup-container" class='wsg-proxy-container'>
+  <!-- REGISTRATION SETTINGS -->
+  {% section 'wsg-registration-settings' %}
+  <!-- LOGIN -->
+  <p class='wsg-signup-link wsg-center'>
+    <span data-translation-selector="loginText">Already have an account?</span>
+    <a id="loginLinkA" href="/a/wsg/proxy/login" data-translation-selector="loginLinkA">Login here.</a>
+  </p>
+  <div class='wsg-one-half'>
+    <form id="wsg-signup" tabindex="0">
+      <!-- CUSTOMER (required) -->
+      <div class='wsg-section-header'>
+        <h2 data-translation-selector="customerInfo">Customer Information</h2>
+      </div>
+      <!--FIRST/LAST NAME (required)-->
+      <div class="wsg-two-column">
+        <div class="wsg-input-small">
+          <label id="customer_first_label" for="first_name" data-translation-selector="labelFirstName">First Name</label>
+          <label id="customer_first_label_error" for="first_name" class='wsg-hidden-label wsg-label-error' data-translation-selector="labelRequired">Required</label>
+          <input type="text" value="" placeholder='First Name' name="customer_first" id="first_name" required
+            data-translation-selector="placeFirstName">
+        </div>
+        <div class="wsg-input-small">
+          <label id="customer_last_label" for="last_name" data-translation-selector="labelLastName">Last Name</label>
+          <label id="customer_last_label_error" for="last_name" class='wsg-hidden-label wsg-label-error' data-translation-selector="labelRequired">Required</label>
+          <input type="text" value="" name="customer_last" id="last_name" placeholder="Last Name" required
+            data-translation-selector="placeLastName">
+        </div>
+      </div>
+      <!-- EMAIL (required) -->
+      <div style="margin-bottom: 15px;">
+        <div>
+          <label id="customer_email_label" for="email" data-translation-selector="labelEmail">Email</label>
+          <label id="customer_email_label_error" for="email" class='wsg-hidden-label wsg-label-error' data-translation-selector="labelRequired">Required</label>
+          <input class="wsg-input" type="email" value="" name="customer_email" id="email" placeholder="Email" autocorrect="off"
+            autocapitalize="off" required data-translation-selector="placeEmail">
+        </div>
+      </div>
+      <!--SHIPPING ADDRESS (optional)-->
+      <div class='wsg-section-header'>
+        <h3 data-translation-selector="shipAddress">Shipping Address</h3>
+      </div>
+      <div>
+        <div>
+          <label id="address1_label" for="wsg-form-address1" data-translation-selector="labelAddress1">Address 1</label>
+          <label id="address1_label_error" for="email" class='wsg-hidden-label wsg-label-error'
+          data-translation-selector="labelRequired">Required</label>
+          <input class="wsg-input" id="wsg-form-address1" name="address1" type="text" placeholder="Address Line 1"
+            data-translation-selector="placeAddress1">
+          <label id="address2_label" for="wsg-form-address2" data-translation-selector="labelAddress2">Address 2</label>
+          <label id="address2_label_error" for="email" class='wsg-hidden-label wsg-label-error' data-translation-selector="labelRequired">Required</label>
+          <input class="wsg-input" id="wsg-form-address2" name="address2" type="text" placeholder="Address Line 2"
+            data-translation-selector="placeAddress2">
+        </div>
+      </div>
+      <!--CITY, COUNTRY, STATE, ZIP (optional)-->
+      <div class="wsg-two-column">
+        <div class="wsg-input-small">
+          <div>
+            <label for="wsg-form-city" data-translation-selector="labelCity">City</label>
+            <input class="wsg-input" id="wsg-form-city" placeholder="City" name="city" type="text"
+              data-translation-selector="placeCity">
+          </div>
+        </div>
+        <div class="wsg-input-small">
+          <label for="wsg-form-country" data-translation-selector="labelCountry">Country</label>
+          <label id="country_label_error" for="last_name" class='wsg-hidden-label wsg-label-error' data-translation-selector="labelRequired">Required</label>
+          <select id="wsg-form-country" class="wsg-input-small-full" name="country"
+            data-default="{{shop.address.country}}" required="">{{ country_option_tags }}</select>
+        </div>
+      </div>
+      <div class="wsg-two-column">
+        <div class="wsg-input-small">
+          <label for="wsg-form-province" data-translation-selector="labelState">State/Province</label>
+          <select id="wsg-form-province" class="wsg-input-small-full" name="province"></select>
+        </div>
+        <div class="wsg-input-small wsg-zip">
+          <div>
+            <label for="wsg-form-zip" data-translation-selector="labelZip">Zip/Postal Code</label>
+            <input id="wsg-form-zip" class="wsg-input-small-full" placeholder="Zip/postal code" name="zip" type="text"
+              data-translation-selector="placeZip">
+          </div>
+        </div>
+      </div>
+      <div class="wsg-one-half wsg-center">
+        <hr class='wsg-one-third wsg-element-margin wsg-element-margin-top' />
+      </div>
+      <!-- CUSTOM FIELDS -->
+      {% section 'wsg-custom-fields' %}
+      <p class='wsg-center required-fields-label' data-translation-selector="labelRequiredFields">Missing Required Fields</p>
+      <!--SUBMIT-->
+        <p class='wsg-center wsg-shipping-footer'>
+          <button type="submit" class="btn button" id='wsg-submit'>
+            <span class="button__text" data-translation-selector="continueButton">Continue</span>
+          </button>
+        </p>
+    </form>
+  </div>
+</div>
+
+<style>
+  .wsg-label-error {
+    color: #FF0000;
+  }
+
+  .grecaptcha-badge {
+    z-index: 5;
+  }
+
+  .error-border {
+    border-color: #FF0000 !important;
+  }
+
+  .wsg-one-half{
+    max-width: 40%;
+    margin: 0 auto;
+    min-width: 570px;
+  }
+
+  .wsg-one-third{
+    width: 33%;
+    margin: 0 auto;
+  }
+
+  .wsg-center{
+    text-align: center;
+  }
+
+  .wsg-signup-link {
+    font-size:1.2em;
+  }
+
+  .required-fields-label {
+    color: #FF0000;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    display: none;
+  }
+
+  .wsg-input-small input{
+    width: 100%;
+    margin: 0px;
+  }
+
+  #wsg-signup select,
+  #wsg-ship-modal select {
+    display: inline-block !important;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  .wsg-section-header span {
+    font-size: 1.0em;
+    font-weight: normal;
+    font-style: italic;
+    margin-top: 9px;
+  }
+
+  .wsg-hidden-label {
+    height: 0;
+    width: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    display: none;
+  }
+
+  .wsg-element-margin {
+    margin-bottom: 15px;
+  }
+
+  .wsg-element-margin-top {
+    margin-top: 9px;
+  }
+
+  .wsg-input-small {
+    display: block;
+    width: 48%;
+    vertical-align: top;
+    float: left;
+  }
+
+  .wsg-input-small select {
+    margin: 0 0 9px !important;
+  }
+
+  .wsg-input-small input[type="text"] {
+    margin: 0 0 9px !important;
+  }
+
+  .wsg-input-small:first-child {
+    float: left !important;
+  }
+
+  .wsg-input-small:last-child {
+    float: right;
+  }
+
+  .wsg-input {
+    width: 100%;
+    margin-bottom: 9px !important;
+  }
+
+  .wsg-shipping-footer {
+    margin-top: 22px;
+  }
+
+  .wsg-shipping-footer input {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .wsg-shipping-footer a {
+    color: #6d6d6d;
+    margin-right: 12px;
+  }
+
+  .wsg-two-column {
+    width: calc(100% + 10px);
+    overflow: auto;
+    padding: 0 5px;
+    margin-left: -5px;
+  }
+
+  #wsg-signup select {
+    font: inherit;
+    line-height: 1.5em;
+    /*padding: 0.5em 3.5em 0.5em 1em;*/
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+  }
+
+  .button {
+    position: relative;
+  }
+
+  .button--loading .button__text {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .button--loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+
+  @keyframes button-loading-spinner {
+    from {
+      transform: rotate(0turn);
+    }
+
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  
+  @media only screen and (max-width: 750px) {
+    .wsg-input-small {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+    .wsg-one-half {
+      min-width: 0;
+      max-width: 80% !important;
+    }
+  }
+</style>
+
+<script>
+  // Updates the login link href to match market domain
+  const cleanMarketDomainPath = '{{ routes.root_url | remove: "/" }}'
+
+  if(cleanMarketDomainPath?.length > 0){
+      const wsgLoginUrl = document.getElementById('loginLinkA') 
+    wsgLoginUrl.href = `/${cleanMarketDomainPath}/pages/ws-account-login`    
+  }
+</script>

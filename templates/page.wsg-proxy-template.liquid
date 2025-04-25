@@ -1,0 +1,238 @@
+<script>
+  function makeRelativeUrlMarketAware(relativeUrl) {
+    let formattedRelativeUrl = relativeUrl;
+  
+    if (relativeUrl.charAt(0) === '/') {
+      // Check if the first character is a "/" if true Remove the first character
+      formattedRelativeUrl = relativeUrl.substring(1);
+    }
+    const shopifyRootRoute = window.Shopify.routes.root;
+  
+    // If a store does not have a shopify routes.root key on their object we 
+    // default to the primary route and console log, as things might not be 
+    //market aware.
+    if (shopifyRootRoute) {
+      // Set the route with the market aware param
+      const marketAwareRoute = `${shopifyRootRoute}${formattedRelativeUrl}`;
+      return marketAwareRoute;
+    } else {
+      // Log that there is no root object, return primary market default
+      console.error(
+        'The shopify root route for the store is undefined or null, check that their theme as not reassign the Shopify.routes object. Using the primary market slug.'
+      );
+      return `/${formattedRelativeUrl}`;
+    }
+  }
+  /**
+   * Get content by URL and append it to the DOM
+   * @param {String} method
+   * @param {String} url
+   * @param {String} appendTo
+  **/
+  function appendContent(method, url, appendTo) {
+    return new Promise(function (resolve, reject) {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+          document.getElementById(appendTo).innerHTML = this.responseText;
+          nodeScriptReplace(document.getElementById(appendTo));
+          return resolve(true);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+      xhr.send();
+    });
+  }
+
+  function nodeScriptReplace(node) {
+    if (nodeScriptIs(node) === true) {
+      node.parentNode.replaceChild(nodeScriptClone(node), node);
+    }
+    else {
+      var i = -1, children = node.childNodes;
+      while (++i < children.length ) {
+        nodeScriptReplace( children[i] );
+      }
+  }
+    return node;
+  }
+
+  function nodeScriptClone(node){
+    var script  = document.createElement("script");
+    script.text = node.innerHTML;
+
+    var i = -1, attrs = node.attributes, attr;
+    while ( ++i < attrs.length ) {
+      script.setAttribute( (attr = attrs[i]).name, attr.value );
+    }
+    return script;
+  }
+
+  function nodeScriptIs(node) {
+    return node.tagName === 'SCRIPT';
+  }
+</script>
+
+{% assign wsgUrl = page.url | split:"/" | last %}
+{% case wsgUrl %}
+  {% when 'ws-account-create' %}
+    <div id="wsg-account-create" class='wsg-proxy-container'></div>
+
+    <script>
+      wsgRunSignup = true;
+      wsgRunProxy = true;
+
+      async function doAjax() {
+        // await code here
+        await appendContent("GET", makeRelativeUrlMarketAware('/a/wsg/proxy/ws-account-create'), "wsg-account-create");
+        setTexts();
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        doAjax();
+      }, { once: true });
+
+      function setTexts() {
+        document.getElementById('wsg-title').innerHTML = `{{ page.title }}`;
+
+        const wsgDefaultPageContent = 'Wholesale Gorilla';
+        if (`{{ page.content }}`.indexOf(wsgDefaultPageContent) === -1) {
+          document.getElementById('wsg-account-create-message').innerHTML = `{{ page.content }}`;
+        }
+      }
+    </script>
+
+  {% when 'ws-account-login' %}
+    <div id="wsg-login" class='wsg-proxy-container'></div>
+
+    <script>
+      async function doAjax() {
+        // await code here
+        await appendContent("GET", makeRelativeUrlMarketAware('/a/wsg/proxy/ws-account-login'), "wsg-login");
+        setTexts();
+
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        doAjax();
+      }, { once: true });
+      
+      function setTexts() {
+        document.getElementById('wsg-title').innerHTML = `{{ page.title }}`;
+
+        const wsgDefaultPageContent = 'Wholesale Gorilla';
+        if (`{{ page.content }}`.indexOf(wsgDefaultPageContent) === -1) {
+          document.getElementById('wsg-login-desc').innerHTML = `{{ page.content }}`;
+        }
+      }
+    </script>
+
+  {% when 'ws-quick-order-form' %}
+    <div id="wsg-quick-order-form" class='wsg-proxy-container'></div>
+    <script>
+      //includes polyfill
+      if (!String.prototype.includes) {
+        String.prototype.includes = function(search, start) {
+          'use strict';
+          if (typeof start !== 'number') {
+            start = 0;
+          }
+
+          if (start + search.length > this.length) {
+            return false;
+          } else {
+            return this.indexOf(search, start) !== -1;
+          }
+        };
+      }
+
+      var wsgRunSinglePageV2 = true;
+      wsgRunProxy = true;
+      var wsgProdArraySP = [];
+      var wsgProdIndex = 0;
+      var wsgDataSPTemp;
+      var wsgCartItems = {{ cart.items | json}}
+
+      const wsgUrlSearchParams = new URLSearchParams(window.location.search);
+      const wsgUrlParams = Object.fromEntries(wsgUrlSearchParams.entries());
+      const wsgQs = new URLSearchParams(wsgUrlParams).toString();
+      let wsgReqUrl = makeRelativeUrlMarketAware('/a/wsg/proxy/ws-quick-order-form');
+      if(wsgQs) wsgReqUrl += '?' + wsgQs;
+
+      var wsgCollectionId = wsgUrlParams.id || 0 //current collection id
+      var wsgPage = wsgUrlParams.page || 1; //index of current page in product loop pagination
+
+      document.addEventListener('DOMContentLoaded', async function () {
+        await appendContent('GET', wsgReqUrl, 'wsg-quick-order-form');
+        setTexts();
+      }, { once: true })
+
+      function setTexts() {
+        document.getElementById('wsg-title').innerHTML = `{{ page.title }}`;
+
+        const wsgDefaultPageContent = 'Wholesale Gorilla';
+        if (`{{ page.content }}`.indexOf(wsgDefaultPageContent) === -1) {
+          document.getElementById('wsg-quick-order-message').innerHTML = `{{ page.content }}`;
+        }
+      }
+    </script>
+  {% when 'ws-cart' %}
+    <!-- WSG CUSTOM create json of stock data -->
+    {% capture wsgStockData %}{% for item in cart.items %}"{{item.id}}":{"stock":{{item.variant.inventory_quantity}},"policy":"{{item.variant.inventory_policy}}", "shipDate":"{{ item.variant.next_incoming_date | date: "%m/%d" }}" },{% endfor %}{% endcapture %}
+    <!-- END WSG CUSTOM -->
+
+    <div id="wsg-cart" class='wsg-proxy-container'></div>
+    <script>
+      var wsgCurrency = "{{ shop.currency }}";
+      //declare cart specific liquid variables
+      var wsgCustomerId = {{customer.id | json}};
+      var wsgCustomerAddresses = {{customer.addresses | json}};
+
+      var wsgCart = {{cart | json}};
+      var wsgShopCountry = {{shop.address.country | json}};
+      wsgRunCart = true;
+      wsgRunProxy = true;
+      var wsgStockData = {{wsgStockData | json}};
+      var wsgShopLang = "{{request.locale.iso_code }}";
+
+      const wsgUrlSearchParams = new URLSearchParams(window.location.search);
+      const wsgUrlParams = Object.fromEntries(wsgUrlSearchParams.entries());
+      let wsgCartPage = wsgUrlParams.page || 1;
+      const wsgCartPaginationLimit = 20;
+      let wsgCartTotalPages = Math.ceil(wsgCart.items.length / wsgCartPaginationLimit);
+
+      document.addEventListener('DOMContentLoaded', async function () {
+        await appendContent('GET', makeRelativeUrlMarketAware(`/a/wsg/proxy/cart?pages=${wsgCartTotalPages}&page=${wsgCartPage}`), 'wsg-cart');
+        setTexts();
+      }, { once: true })
+      function setTexts() {
+        document.getElementById('wsg-cart-title').innerHTML = `{{ page.title }}`;
+        document.getElementById('wsg-cart-labe-title').innerHTML = `{{ page.title }}`;
+
+        const wsgDefaultPageContent = 'Wholesale Gorilla';
+        if (`{{ page.content }}`.indexOf(wsgDefaultPageContent) === -1) {
+          document.getElementById('wsg-cart-message').innerHTML = `{{ page.content }}`;
+        }
+      }
+    </script>
+  {% when 'ws-proxy' %}
+    <div id='wsg-proxy-content' class='wsg-proxy-container'></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', async function () {
+        const wsgUrlSearchParams = new URLSearchParams(window.location.search);
+
+        let wsgProxyUrl = wsgUrlSearchParams.get('proxyUrl');
+        if(!wsgProxyUrl) return;
+
+        const wsgUrlParams = Object.fromEntries(wsgUrlSearchParams.entries());
+        const wsgQs = new URLSearchParams(wsgUrlParams).toString();
+        if(wsgQs) wsgProxyUrl += '?' + wsgQs;
+
+        // await code here
+        await appendContent('GET', wsgProxyUrl, 'wsg-proxy-content');
+      }, { once: true });
+    </script>
+{% endcase %}
