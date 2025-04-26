@@ -113,6 +113,7 @@
                 aria-labelledby="StandardCardNoMediaLink-{{ section_id }}-{{ card_product.id }} NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
               >
                 {{ card_product.title | escape }}
+
               </a>
             </h3>
           </div>
@@ -195,6 +196,13 @@
                 </span>
               </p>
             {%- endif -%}
+
+            {% comment %} SKU Element {% endcomment %}
+            {% if card_product.selected_or_first_available_variant.sku != blank %}
+              <div class="sku">
+                <span class="label">SKU:</span><span class="name"> {{ card_product.selected_or_first_available_variant.sku }}</span>
+              </div>
+            {% endif %}
 
             {% render 'price', product: card_product, price_class: '' %}
           </div>
