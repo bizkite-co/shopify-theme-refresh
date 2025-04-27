@@ -175,6 +175,7 @@
                       {{ form | payment_terms }}
                     {%- endform -%}
                   </div>
+                  {%- render 'product-skus-list', product:product %}
                 {%- endif -%}
               {%- when 'sku' -%}
                 <p
