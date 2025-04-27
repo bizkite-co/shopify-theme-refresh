@@ -363,7 +363,14 @@
   margin-top: 1rem;
 }
 
-.card-information .sku {
-  color: #0008;
-
+.sku {
+  font-weight: 600;
+  font-size: 0.8em;
+}
+.sku .name {
+  opacity: 50%;
+}
+.sku .label {
+  opacity: 40%;
+  font-size: 0.9em;
 }

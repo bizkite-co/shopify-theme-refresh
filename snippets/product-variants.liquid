@@ -101,8 +101,10 @@
       {% comment %} Display variant title and SKU using the found matching_variant {% endcomment %}
       {%- if matching_variant -%}
         {{ matching_variant.title -}}
-        <span for="sku" style="opacity: 50%; padding: 0 5px 0 10px;">SKU: </span>
-        <span style="opacity: 50%;">{{ matching_variant.sku }}</span>
+        <span class="sku">
+          <span class="label">SKU: </span>
+          <span class="name">{{ matching_variant.sku }}</span>
+        </span>
       {%- else -%}
         {{ value -}}
         {% comment %}

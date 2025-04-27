@@ -200,6 +200,8 @@
                             <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
                           {%- endif -%}
 
+                          {%- render 'item-sku', item:item -%}
+
                           <ul
                             class="discounts list-unstyled"
                             role="list"

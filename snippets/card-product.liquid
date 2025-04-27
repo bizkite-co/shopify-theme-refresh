@@ -197,14 +197,9 @@
               </p>
             {%- endif -%}
 
-            {% comment %} SKU Element {% endcomment %}
-            {% if card_product.selected_or_first_available_variant.sku != blank %}
-              <div class="sku">
-                <span class="label">SKU:</span><span class="name"> {{ card_product.selected_or_first_available_variant.sku }}</span>
-              </div>
-            {% endif %}
-
             {% render 'price', product: card_product, price_class: '' %}
+
+            {% render 'product-skus-list', product:card_product %}
           </div>
         </div>
         {%- if show_quick_add -%}
