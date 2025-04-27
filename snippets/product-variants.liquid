@@ -1,0 +1,124 @@
+{% comment %}
+  Renders product variant options with SKU and Title for radio buttons
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+
+
+  Usage:
+  {% render 'product-variants',
+    product: product,
+    option: option,
+    block: block
+  %}
+{% endcomment %}
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+
+  # Pre-collect variant data for availability checks
+  assign variants_available_arr = product.variants | map: 'available'
+  assign variants_option1_arr = product.variants | map: 'option1'
+  assign variants_option2_arr = product.variants | map: 'option2'
+  assign variants_option3_arr = product.variants | map: 'option3'
+-%}
+
+{%- for value in option.values -%}
+  {%- liquid
+    assign option_disabled = true
+    # To store a variant matching this value for display
+    assign matching_variant = null
+
+    # Check if this option value is available considering other selected options
+    for option1_name in variants_option1_arr
+      assign variant_index = forloop.index0
+      assign variant_available = variants_available_arr[variant_index]
+      assign variant_option1 = variants_option1_arr[variant_index]
+      assign variant_option2 = variants_option2_arr[variant_index]
+      assign variant_option3 = variants_option3_arr[variant_index]
+
+      assign value_matches_variant = false
+      case option.position
+        when 1
+          if variant_option1 == value
+            assign value_matches_variant = true
+          endif
+        when 2
+          if variant_option1 == product.selected_or_first_available_variant.option1 and variant_option2 == value
+            assign value_matches_variant = true
+          endif
+        when 3
+          if variant_option1 == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variant_option3 == value
+            assign value_matches_variant = true
+          endif
+      endcase
+
+      if value_matches_variant and variant_available
+        assign option_disabled = false
+        # Found an available variant for this option value, no need to check further for availability
+        # We can also grab a variant here to display its title and SKU.
+        # Find the first variant that exactly matches all selected options + the current value.
+        for v in product.variants
+          assign v_match = true
+          if option.position == 1 and v.option1 != value
+            assign v_match = false
+          elsif option.position == 2 and v.option1 != product.selected_or_first_available_variant.option1 or v.option2 != value
+            assign v_match = false
+          elsif option.position == 3 and v.option1 != product.selected_or_first_available_variant.option1 or v.option2 != product.selected_or_first_available_variant.option2 or v.option3 != value
+            assign v_match = false
+            # This endif closes the if/elsif block
+          endif
+
+          if v_match
+            assign matching_variant = v
+            break
+          endif
+        endfor
+        # Exit the availability check loop once an available variant is found
+        break
+      endif
+    endfor
+  -%}
+
+  {% comment %} Only render radio buttons, as requested {% endcomment %}
+  {%- if block.settings.picker_type == 'button' -%}
+    <input
+      type="radio"
+      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+      name="{{ option.name }}"
+      value="{{ value | escape }}"
+      form="{{ product_form_id }}"
+      {% if option.selected_value == value %}
+        checked
+      {% endif %}
+      {% if option_disabled %}
+        class="disabled"
+        disabled
+      {% endif %}
+    >
+    <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+      {% comment %} Display variant title and SKU using the found matching_variant {% endcomment %}
+      {%- if matching_variant -%}
+        {{ matching_variant.title -}}
+        <span for="sku" style="opacity: 50%; padding: 0 5px 0 10px;">SKU: </span>
+        <span style="opacity: 50%;">{{ matching_variant.sku }}</span>
+      {%- else -%}
+        {{ value -}}
+        {% comment %}
+          If disabled and no matching variant found, still show the unavailable text
+        {% endcomment %}
+        {% if option_disabled %}
+          <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+        {% endif %}
+      {%- endif -%}
+
+      {% comment %}
+        Add sold out/unavailable text if disabled and a matching variant was found
+      {% endcomment %}
+      {% if option_disabled and matching_variant %}
+        <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+      {% endif %}
+    </label>
+  {%- endif -%}
+{%- endfor -%}
