@@ -1,0 +1,12 @@
+{% comment %} SKU Element {% endcomment %}
+{%- if product.variants.size > 0 -%}
+  <div class="sku">
+    {%- if product.variants.size == 1 -%}
+      <span class="label">SKU:</span>
+      <span class="name"> {{ product.selected_or_first_available_variant.sku }}</span>
+    {%- else -%}
+      <span class="label">SKUs:</span>
+      <span class="name"> {{ product.variants | map: 'sku' | join: ', ' }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
