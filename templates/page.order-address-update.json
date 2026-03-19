@@ -1,0 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: This is a custom template for order address updates.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "order-address-update",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

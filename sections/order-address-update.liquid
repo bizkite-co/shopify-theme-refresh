@@ -1,0 +1,445 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="customer address-update section-{{ section.id }}-padding">
+  <h1>{{ 'customer.address_update.title' | t }}</h1>
+  
+  {%- comment -%} Error/validation messages will appear here {%- endcomment -%}
+  <div id="address-update-messages" class="address-update-messages" style="display: none;">
+    <div id="error-message" class="error-message" style="display: none; color: #dc3545; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 4px; margin-bottom: 20px;"></div>
+    <div id="success-message" class="success-message" style="display: none; color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 4px; margin-bottom: 20px;"></div>
+  </div>
+  
+  {%- comment -%} Loading state {%- endcomment -%}
+  <div id="loading-state" class="loading-state">
+    <p>{{ 'customer.address_update.loading' | t }}</p>
+  </div>
+  
+  {%- comment -%} Address update form - initially hidden until validated {%- endcomment -%}
+  <div id="address-form-container" style="display: none;">
+    <p class="order-info">{{ 'customer.address_update.order_number' | t }}: <strong id="order-number"></strong></p>
+    
+    <div id="current-address" style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+      <h3 style="margin-top: 0;">{{ 'customer.address_update.current_address' | t }}:</h3>
+      <p id="current-address-display"></p>
+    </div>
+    
+    <form id="address-update-form">
+      <input type="hidden" name="order_id" id="order_id" value="">
+      <input type="hidden" name="hash" id="hash" value="">
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressFirstName"
+          name="address[first_name]"
+          autocomplete="given-name"
+          placeholder="{{ 'customer.addresses.first_name' | t }}"
+          required
+        >
+        <label for="AddressFirstName">{{ 'customer.addresses.first_name' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressLastName"
+          name="address[last_name]"
+          autocomplete="family-name"
+          placeholder="{{ 'customer.addresses.last_name' | t }}"
+          required
+        >
+        <label for="AddressLastName">{{ 'customer.addresses.last_name' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressCompany"
+          name="address[company]"
+          autocomplete="organization"
+          placeholder="{{ 'customer.addresses.company' | t }}"
+        >
+        <label for="AddressCompany">{{ 'customer.addresses.company' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressAddress1"
+          name="address[address1]"
+          autocomplete="address-line1"
+          placeholder="{{ 'customer.addresses.address1' | t }}"
+          required
+        >
+        <label for="AddressAddress1">{{ 'customer.addresses.address1' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressAddress2"
+          name="address[address2]"
+          autocomplete="address-line2"
+          placeholder="{{ 'customer.addresses.address2' | t }}"
+        >
+        <label for="AddressAddress2">{{ 'customer.addresses.address2' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressCity"
+          name="address[city]"
+          autocomplete="address-level2"
+          placeholder="{{ 'customer.addresses.city' | t }}"
+          required
+        >
+        <label for="AddressCity">{{ 'customer.addresses.city' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <select
+          id="AddressCountry"
+          name="address[country]"
+          autocomplete="country"
+          placeholder="{{ 'customer.addresses.country' | t }}"
+          required
+        >
+          <option value="" disabled selected>{{ 'customer.addresses.country' | t }}</option>
+        </select>
+        <label for="AddressCountry">{{ 'customer.addresses.country' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressProvince"
+          name="address[province]"
+          autocomplete="address-level1"
+          placeholder="{{ 'customer.addresses.province' | t }}"
+        >
+        <label for="AddressProvince">{{ 'customer.addresses.province' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="text"
+          id="AddressZip"
+          name="address[zip]"
+          autocomplete="postal-code"
+          placeholder="{{ 'customer.addresses.zip' | t }}"
+          required
+        >
+        <label for="AddressZip">{{ 'customer.addresses.zip' | t }}</label>
+      </div>
+      
+      <div class="field">
+        <input
+          type="tel"
+          id="AddressPhone"
+          name="address[phone]"
+          autocomplete="tel"
+          placeholder="{{ 'customer.addresses.phone' | t }}"
+        >
+        <label for="AddressPhone">{{ 'customer.addresses.phone' | t }}</label>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" id="submit-button" class="button">
+          {{ 'customer.address_update.submit' | t }}
+        </button>
+        <span id="submit-spinner" style="display: none; margin-left: 10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="60 30"></circle>
+          </svg>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .address-update .field {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .address-update .field input,
+  .address-update .field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .address-update .field label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    color: #666;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: #fff;
+    padding: 0 4px;
+  }
+  
+  .address-update .field input:focus + label,
+  .address-update .field input:not(:placeholder-shown) + label,
+  .address-update .field select:focus + label,
+  .address-update .field select:valid + label {
+    top: -8px;
+    font-size: 12px;
+    color: #007c89;
+  }
+  
+  .address-update .form-actions {
+    margin-top: 30px;
+  }
+  
+  .address-update .button {
+    background-color: #007c89;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .address-update .button:hover {
+    background-color: #005f6b;
+  }
+  
+  .address-update .button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+</style>
+
+<script>
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('order');
+    const hash = params.get('hash');
+    
+    const messagesDiv = document.getElementById('address-update-messages');
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+    const loadingState = document.getElementById('loading-state');
+    const formContainer = document.getElementById('address-form-container');
+    const form = document.getElementById('address-update-form');
+    
+    function showError(message) {
+      messagesDiv.style.display = 'block';
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = message;
+      successMessage.style.display = 'none';
+      loadingState.style.display = 'none';
+      formContainer.style.display = 'none';
+    }
+    
+    function showSuccess(message) {
+      messagesDiv.style.display = 'block';
+      successMessage.style.display = 'block';
+      successMessage.textContent = message;
+      errorMessage.style.display = 'none';
+      loadingState.style.display = 'none';
+      formContainer.style.display = 'none';
+    }
+    
+    function showForm() {
+      loadingState.style.display = 'none';
+      formContainer.style.display = 'block';
+      messagesDiv.style.display = 'none';
+    }
+    
+    function formatAddress(address) {
+      const parts = [];
+      if (address.first_name) parts.push(address.first_name + ' ' + (address.last_name || ''));
+      if (address.address1) parts.push(address.address1);
+      if (address.address2) parts.push(address.address2);
+      if (address.city) parts.push(address.city + ', ' + (address.province || '') + ' ' + (address.zip || ''));
+      if (address.country) parts.push(address.country);
+      return parts.join('<br>');
+    }
+    
+    function populateForm(address) {
+      document.getElementById('order_id').value = orderId;
+      document.getElementById('hash').value = hash;
+      document.getElementById('order-number').textContent = '#' + orderId;
+      document.getElementById('current-address-display').innerHTML = formatAddress(address);
+      
+      if (address.first_name) document.getElementById('AddressFirstName').value = address.first_name;
+      if (address.last_name) document.getElementById('AddressLastName').value = address.last_name;
+      if (address.company) document.getElementById('AddressCompany').value = address.company;
+      if (address.address1) document.getElementById('AddressAddress1').value = address.address1;
+      if (address.address2) document.getElementById('AddressAddress2').value = address.address2;
+      if (address.city) document.getElementById('AddressCity').value = address.city;
+      if (address.zip) document.getElementById('AddressZip').value = address.zip;
+      if (address.phone) document.getElementById('AddressPhone').value = address.phone;
+      
+      const countrySelect = document.getElementById('AddressCountry');
+      const defaultCountry = address.country || 'United States';
+      
+      const countries = [
+        'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France',
+        'Spain', 'Italy', 'Netherlands', 'Belgium', 'Austria', 'Switzerland',
+        'Sweden', 'Norway', 'Denmark', 'Finland', 'Ireland', 'Portugal',
+        'Mexico', 'Japan', 'China', 'India', 'Brazil', 'Argentina'
+      ];
+      
+      countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        if (country === defaultCountry) option.selected = true;
+        countrySelect.appendChild(option);
+      });
+    }
+    
+    // Validate hash and fetch order details
+    async function init() {
+      if (!orderId || !hash) {
+        showError('Invalid link. Please use the link from your email to update your address.');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/apps/turboship/validate-address-hash', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ orderId: parseInt(orderId), hash: hash })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          showError(data.error || 'Unable to validate your request. The link may have expired.');
+          return;
+        }
+        
+        if (data.valid && data.order) {
+          populateForm(data.order.shipping_address);
+          showForm();
+        } else {
+          showError('Invalid or expired link. Please contact support.');
+        }
+      } catch (error) {
+        console.error('Error validating hash:', error);
+        showError('An error occurred. Please try again later.');
+      }
+    }
+    
+    // Handle form submission
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitButton = document.getElementById('submit-button');
+      const submitSpinner = document.getElementById('submit-spinner');
+      
+      submitButton.disabled = true;
+      submitSpinner.style.display = 'inline-block';
+      
+      const formData = new FormData(form);
+      const address = {
+        first_name: formData.get('address[first_name]'),
+        last_name: formData.get('address[last_name]'),
+        company: formData.get('address[company]'),
+        address1: formData.get('address[address1]'),
+        address2: formData.get('address[address2]'),
+        city: formData.get('address[city]'),
+        province: formData.get('address[province]'),
+        zip: formData.get('address[zip]'),
+        country: formData.get('address[country]'),
+        phone: formData.get('address[phone]')
+      };
+      
+      try {
+        const response = await fetch('/apps/turboship/update-order-address', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId: parseInt(orderId),
+            hash: hash,
+            address: address
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          showError(data.error || 'Unable to update address. Please try again.');
+          submitButton.disabled = false;
+          submitSpinner.style.display = 'none';
+          return;
+        }
+        
+        showSuccess('Your address has been updated successfully! We will reprocess your order and send you a confirmation email shortly.');
+        
+      } catch (error) {
+        console.error('Error updating address:', error);
+        showError('An error occurred. Please try again later.');
+        submitButton.disabled = false;
+        submitSpinner.style.display = 'none';
+      }
+    });
+    
+    init();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Order Address Update",
+  "class": "section-order-address-update",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

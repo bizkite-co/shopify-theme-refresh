@@ -447,6 +447,13 @@
       "password": "Password",
       "password_confirm": "Confirm password",
       "submit": "Reset password"
+    },
+    "address_update": {
+      "title": "Update Shipping Address",
+      "loading": "Validating your request...",
+      "order_number": "Order",
+      "current_address": "Current Address",
+      "submit": "Update Address"
     }
   },
   "gift_cards": {
