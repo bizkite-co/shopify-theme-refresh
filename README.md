@@ -10,3 +10,8 @@
 This theme was a copy of Refresh v9.0.0. The latest version is 15.3.0.
 
 Some SKU configuration was lost, and now you aren't able to add SKUs through the theme settings, so we had to add some SKU snippets manually. We'll probably leave it that way until we do a major theme update.
+
+## What to add to this document
+
+* Commands to fetch the live site theme.
+* Commands to reconcile changes.
