@@ -9,7 +9,7 @@ help: ## Display this help screen
 # ==============================================================================
 
 env-info: ## Show current environment info (branch, shop, theme ID)
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Current branch: $$(git branch --show-current)" && echo "SHOPIFY_SHOP: $${SHOPIFY_SHOP:-<not set>}" && echo "SHOPIFY_THEME_ID: $${SHOPIFY_THEME_ID:-<not set>}"'
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Current branch: $$(git branch --show-current)" && echo "SHOPIFY_SHOP: $${SHOPIFY_SHOP:-<not set>}" && echo "SHOPIFY_THEME_ID: $${SHOPIFY_THEME_ID:-<not set>}" && echo "SHOPIFY_ACCESS_TOKEN: $${SHOPIFY_ACCESS_TOKEN:-<not set>}"'
 
 # ==============================================================================
 # Shopify Theme Operations
@@ -33,6 +33,16 @@ publish: ## Publish the current theme to make it live
 	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Publishing theme on $$SHOPIFY_SHOP..." && shopify theme publish --store=$$SHOPIFY_SHOP'
 
 # ==============================================================================
+# Shopify Page Operations (Python script with 1Password SDK)
+# ==============================================================================
+
+create-address-update-page: ## Create the invalid address update page (environment-aware)
+	@mise exec -- python scripts/create_shopify_page.py "Invalid Address Update" order-address-update order-address-update
+
+create-page: ## Create a Shopify page (usage: make create-page TITLE="Page Title" HANDLE="page-handle" TEMPLATE="page-template")
+	@TITLE="${TITLE:-Page Title}" && HANDLE="${HANDLE:-page-handle}" && TEMPLATE="${TEMPLATE:-page}" && mise exec -- python scripts/create_shopify_page.py "$$TITLE" "$$HANDLE" "$$TEMPLATE"
+
+# ==============================================================================
 # Git Branch Operations
 # ==============================================================================
 
@@ -44,4 +54,4 @@ branch-status: ## Show git status and current branch
 # Help
 # ==============================================================================
 
-.PHONY: env-info pull-prod pull-uat push push-unpublished publish branch-status
+.PHONY: env-info pull-prod pull-uat push push-unpublished publish create-address-update-page create-page branch-status
