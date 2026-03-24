@@ -1,7 +1,7 @@
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: calc({{ section.settings.padding_top }}px * 0.75);
-    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px * 0.75);
   }
 
   @media screen and (min-width: 750px) {
@@ -10,9 +10,27 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Always center content in this custom-liquid section */
+  #custom-liquid-target {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center !important;
+    width: 100%;
+  }
+
+  /* Ensure child elements also stay centered */
+  #custom-liquid-target * {
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
 {%- endstyle -%}
+
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="section-{{ section.id }}-padding">
+  <div id="custom-liquid-target" class="section-{{ section.id }}-padding">
     {{ section.settings.custom_liquid }}
   </div>
 </div>
@@ -33,26 +51,11 @@
       "type": "select",
       "id": "color_scheme",
       "options": [
-        {
-          "value": "accent-1",
-          "label": "t:sections.all.colors.accent_1.label"
-        },
-        {
-          "value": "accent-2",
-          "label": "t:sections.all.colors.accent_2.label"
-        },
-        {
-          "value": "background-1",
-          "label": "t:sections.all.colors.background_1.label"
-        },
-        {
-          "value": "background-2",
-          "label": "t:sections.all.colors.background_2.label"
-        },
-        {
-          "value": "inverse",
-          "label": "t:sections.all.colors.inverse.label"
-        }
+        { "value": "accent-1", "label": "t:sections.all.colors.accent_1.label" },
+        { "value": "accent-2", "label": "t:sections.all.colors.accent_2.label" },
+        { "value": "background-1", "label": "t:sections.all.colors.background_1.label" },
+        { "value": "background-2", "label": "t:sections.all.colors.background_2.label" },
+        { "value": "inverse", "label": "t:sections.all.colors.inverse.label" }
       ],
       "default": "background-1",
       "label": "t:sections.all.colors.label"
@@ -83,9 +86,7 @@
     }
   ],
   "presets": [
-    {
-      "name": "t:sections.custom-liquid.presets.name"
-    }
+    { "name": "t:sections.custom-liquid.presets.name" }
   ]
 }
 {% endschema %}

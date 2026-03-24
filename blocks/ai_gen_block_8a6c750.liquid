@@ -1,0 +1,359 @@
+{% doc %}
+  @prompt
+    404 Section Telling Users that the link they clicked was broken. Sorry about that. Chances are they were linking to one of our product or collection pages [insert collections]
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-404-container-{{ ai_gen_id }} {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .ai-404-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 20px;
+    font-weight: 700;
+  }
+
+  .ai-404-message-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 40px;
+    line-height: 1.6;
+  }
+
+  .ai-404-collections-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .ai-404-collection-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 20px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid {{ block.settings.card_border_color }};
+  }
+
+  .ai-404-collection-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-404-collection-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    margin-bottom: 12px;
+  }
+
+  .ai-404-collection-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 150px;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-404-collection-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60px;
+    height: 60px;
+    opacity: 0.3;
+  }
+
+  .ai-404-collection-title-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 600;
+    color: {{ block.settings.card_text_color }};
+    margin: 0;
+  }
+
+  .ai-404-home-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-404-home-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_background }};
+  }
+
+  .ai-404-empty-state-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #999;
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-404-heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.7);
+    }
+
+    .ai-404-collections-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-404-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <h1 class="ai-404-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+  
+  <div class="ai-404-message-{{ ai_gen_id }}">
+    {{ block.settings.message }}
+  </div>
+
+  {% if block.settings.collection_1 != blank or block.settings.collection_2 != blank or block.settings.collection_3 != blank %}
+    <div class="ai-404-collections-{{ ai_gen_id }}">
+      {% if block.settings.collection_1 != blank %}
+        <a href="{{ block.settings.collection_1.url }}" class="ai-404-collection-card-{{ ai_gen_id }}">
+          {% if block.settings.collection_1.featured_image %}
+            <img
+              src="{{ block.settings.collection_1.featured_image | image_url: width: 400 }}"
+              alt="{{ block.settings.collection_1.featured_image.alt | escape }}"
+              class="ai-404-collection-image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="400"
+              height="300"
+            >
+          {% else %}
+            <div class="ai-404-collection-image-placeholder-{{ ai_gen_id }}">
+              {{ 'collection-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+          <h3 class="ai-404-collection-title-{{ ai_gen_id }}">{{ block.settings.collection_1.title }}</h3>
+        </a>
+      {% endif %}
+
+      {% if block.settings.collection_2 != blank %}
+        <a href="{{ block.settings.collection_2.url }}" class="ai-404-collection-card-{{ ai_gen_id }}">
+          {% if block.settings.collection_2.featured_image %}
+            <img
+              src="{{ block.settings.collection_2.featured_image | image_url: width: 400 }}"
+              alt="{{ block.settings.collection_2.featured_image.alt | escape }}"
+              class="ai-404-collection-image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="400"
+              height="300"
+            >
+          {% else %}
+            <div class="ai-404-collection-image-placeholder-{{ ai_gen_id }}">
+              {{ 'collection-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+          <h3 class="ai-404-collection-title-{{ ai_gen_id }}">{{ block.settings.collection_2.title }}</h3>
+        </a>
+      {% endif %}
+
+      {% if block.settings.collection_3 != blank %}
+        <a href="{{ block.settings.collection_3.url }}" class="ai-404-collection-card-{{ ai_gen_id }}">
+          {% if block.settings.collection_3.featured_image %}
+            <img
+              src="{{ block.settings.collection_3.featured_image | image_url: width: 400 }}"
+              alt="{{ block.settings.collection_3.featured_image.alt | escape }}"
+              class="ai-404-collection-image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="400"
+              height="300"
+            >
+          {% else %}
+            <div class="ai-404-collection-image-placeholder-{{ ai_gen_id }}">
+              {{ 'collection-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+          <h3 class="ai-404-collection-title-{{ ai_gen_id }}">{{ block.settings.collection_3.title }}</h3>
+        </a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="ai-404-empty-state-{{ ai_gen_id }}">
+      Next, add collections to help users navigate
+    </div>
+  {% endif %}
+
+  <a href="{{ routes.root_url }}" class="ai-404-home-button-{{ ai_gen_id }}">
+    {{ block.settings.button_text }}
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "404 page not found",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Page not found"
+    },
+    {
+      "type": "richtext",
+      "id": "message",
+      "label": "Message",
+      "default": "<p>Sorry about that. The link you clicked was broken. Chances are you were looking for one of our product or collection pages below.</p>"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Return to home"
+    },
+    {
+      "type": "header",
+      "content": "Collections"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "Collection 1"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Collection 2"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Collection 3"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 14,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Collection cards"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#dd1d1d"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 page not found"
+    }
+  ]
+}
+{% endschema %}

@@ -249,20 +249,6 @@
     <!-- Start of HubSpot Embed Code -->
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/23392699.js"></script>
     <!-- End of HubSpot Embed Code -->
-
-    {% comment %}
-    NOINDEX RULES FOR SEO CLEANUP
-    1. Noindex the "catch-all" collection (/collections/all)
-    2. Noindex all tag-filtered collection URLs (e.g. /collections/turbo-kits/master)
-    {% endcomment %}
-
-    {% if collection and collection.handle == 'all' %}
-      <meta name="robots" content="noindex,follow">
-    {% endif %}
-
-    {% if template contains 'collection' and current_tags %}
-      <meta name="robots" content="noindex,follow">
-    {% endif %}
   </head>
 
   <body class="gradient">
@@ -324,29 +310,5 @@
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  <!-- WPD Start -->
-                {% if customer.tags.size > 0 and template != 'cart' %}
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                      let checkoutbtninterval = setInterval(function(){
-                        var x=document.querySelectorAll("input[name='checkout'], button[name='checkout'], input[name='goto_pp'], button[name='goto_pp'], input[name='goto_gc'], button[name='goto_gc'], [href$='checkout']");
-                        var WPD_RedirectToCart = function(e) {
-                          	e.stopPropagation();
-                            e.preventDefault();
-                            window.location = '/cart';
-                            };
-                            for (var i = 0; i < x.length; i++) {
-                                x[i].addEventListener('click', WPD_RedirectToCart, false);
-                            }
-                        },500)
-                });
-              </script>
-               {% endif %}
-         
-
-               {% if customer.tags.size > 0 and template == 'cart' %}
-                 {% include 'wcp_cart' %}
-               {% endif %}
-               <!-- WPD End -->
   </body>
 </html>

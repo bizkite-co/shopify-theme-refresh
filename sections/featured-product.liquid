@@ -10,14 +10,26 @@
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-
-  @media screen and (min-width: 750px) {
+  @media (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Refresh: disable decorative underlines via vars (harmless if unused) */
+  #ProductInfo-{{ section.id }} .product__title {
+    --link-underline-color: transparent !important;
+    --link-underline-thickness: 0 !important;
+    --underline-thickness: 0 !important;
+    --text-decoration-thickness: 0 !important;
+    --link-underline-offset: 0 !important;
+    text-decoration: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
 {%- endstyle -%}
+
 
 <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
 
@@ -143,10 +155,28 @@
                 </p>
               {%- when 'title' -%}
                 <h2 class="product__title {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
-                  {%- if product.title != blank -%}
-                    {{ product.title | escape }}
+                  {%- if product != blank and product.title != blank -%}
+                    <a href="{{ product.url }}" class="product__title-link"
+                      style="
+                        all: unset !important;
+                        display: inline !important;
+                        cursor: pointer !important;
+                        color: inherit !important;
+                        font: inherit !important;
+                        line-height: inherit !important;
+                        text-decoration: none !important;
+                        text-decoration-color: transparent !important;
+                        text-decoration-thickness: 0 !important;
+                        border: 0 !important;
+                        border-bottom: 0 !important;
+                        box-shadow: none !important;
+                        background: none !important;
+                        background-image: none !important;
+                      ">
+                      {{ product.title | escape }}
+                    </a>
                   {%- else -%}
-                    {{ 'onboarding.product_title' | t }}
+                    <span>{{ 'onboarding.product_title' | t }}</span>
                   {%- endif -%}
                 </h2>
               {%- when 'price' -%}
