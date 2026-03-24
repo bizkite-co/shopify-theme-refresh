@@ -9,41 +9,28 @@ help: ## Display this help screen
 # ==============================================================================
 
 env-info: ## Show current environment info (branch, shop, theme ID)
-	@echo "Current branch: $$(git branch --show-current)"
-	@echo "SHOPIFY_SHOP: $${SHOPIFY_SHOP:-<not set>}"
-	@echo "SHOPIFY_THEME_ID: $${SHOPIFY_THEME_ID:-<not set>}"
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Current branch: $$(git branch --show-current)" && echo "SHOPIFY_SHOP: $${SHOPIFY_SHOP:-<not set>}" && echo "SHOPIFY_THEME_ID: $${SHOPIFY_THEME_ID:-<not set>}"'
 
 # ==============================================================================
 # Shopify Theme Operations
 # ==============================================================================
 
 pull-prod: ## Pull theme from PROD (requires main branch)
-	@if [ "$$(git branch --show-current)" != "main" ]; then \
-		echo "Error: Must be on main branch for PROD pull"; \
-		exit 1; \
-	fi
-	@echo "Pulling from PROD ($$SHOPIFY_SHOP)..."
-	shopify theme pull
+	@bash -c 'if [ "$$(git branch --show-current)" != "main" ]; then echo "Error: Must be on main branch for PROD pull"; exit 1; fi'
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pulling from PROD ($$SHOPIFY_SHOP)..." && shopify theme pull --store=$$SHOPIFY_SHOP'
 
 pull-uat: ## Pull theme from UAT (requires uat branch)
-	@if [ "$$(git branch --show-current)" != "uat" ]; then \
-		echo "Error: Must be on uat branch for UAT pull"; \
-		exit 1; \
-	fi
-	@echo "Pulling from UAT ($$SHOPIFY_SHOP)..."
-	shopify theme pull
+	@bash -c 'if [ "$$(git branch --show-current)" != "uat" ]; then echo "Error: Must be on uat branch for UAT pull"; exit 1; fi'
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pulling from UAT ($$SHOPIFY_SHOP)..." && shopify theme pull --store=$$SHOPIFY_SHOP'
 
 push: ## Push theme to current environment (based on branch)
-	@echo "Pushing to $$SHOPIFY_SHOP (theme: $$SHOPIFY_THEME_ID)..."
-	shopify theme push
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pushing to $$SHOPIFY_SHOP (theme: $$SHOPIFY_THEME_ID)..." && shopify theme push --store=$$SHOPIFY_SHOP --theme=$$SHOPIFY_THEME_ID'
 
 push-unpublished: ## Push as a new unpublished theme
-	@echo "Pushing as new unpublished theme to $$SHOPIFY_SHOP..."
-	shopify theme push --unpublished
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pushing as new unpublished theme to $$SHOPIFY_SHOP..." && shopify theme push --store=$$SHOPIFY_SHOP --unpublished'
 
 publish: ## Publish the current theme to make it live
-	@echo "Publishing theme on $$SHOPIFY_SHOP..."
-	shopify theme publish
+	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Publishing theme on $$SHOPIFY_SHOP..." && shopify theme publish --store=$$SHOPIFY_SHOP'
 
 # ==============================================================================
 # Git Branch Operations
