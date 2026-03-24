@@ -1,23 +1,12 @@
 # Environment files (contain sensitive config - use example.envrc as template)
 .env
 *.env
-!example.envrc
+!.envrc
+example.envrc
 
-# Dependencies
-node_modules/
+# Downloaded theme ZIP files
+*.zip
 
-# Build outputs
-dist/
-.cache/
-
-# IDE
-.idea/
-.vscode/
-*.swp
-
-# OS
+# IDE and OS files
 .DS_Store
-Thumbs.db
-
-# Docs (if separate)
-docs/tasks
+*.swp
