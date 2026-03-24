@@ -1,2 +1,23 @@
+# Environment files (contain sensitive config - use example.envrc as template)
+.env
+*.env
+!example.envrc
 
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs (if separate)
 docs/tasks
