@@ -1,7 +1,7 @@
 # Environment files (contain sensitive config - use example.envrc as template)
 .env
 *.env
-!.envrc
+!example.envrc
 example.envrc
 
 # Downloaded theme ZIP files
@@ -9,6 +9,12 @@ example.envrc
 
 # Downloaded Shopify Files (images)
 files/
+
+# Node dependencies and test artifacts
+node_modules/
+playwright-report/
+test-results/
+.playwright/
 
 # IDE and OS files
 .DS_Store

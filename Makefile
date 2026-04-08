@@ -68,6 +68,22 @@ create-address-update-page: ## Create the invalid address update page
 	@mise exec -- python scripts/create_shopify_page.py "Invalid Address Update" order-address-update order-address-update
 
 # ==============================================================================
+# Testing
+# ==============================================================================
+
+test-endpoints: ## Run simple curl tests (usage: make test-endpoints ENV=uat|prod)
+	@bash tests/test-endpoints.sh $(ENV)
+
+test: ## Run Playwright tests on UAT
+	@SHOPIFY_ENV=uat npx playwright test --config=playwright.uat.config.ts
+
+test:prod: ## Run Playwright tests against PROD
+	@SHOPIFY_ENV=prod npx playwright test --config=playwright.prod.config.ts
+
+test:uat: ## Run Playwright tests against UAT
+	@SHOPIFY_ENV=uat npx playwright test --config=playwright.uat.config.ts
+
+# ==============================================================================
 # Git Operations
 # ==============================================================================
 

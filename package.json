@@ -1,0 +1,15 @@
+{
+  "name": "turboheatweldingtools-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for Turbo Heat Welding Tools Shopify theme",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:prod": "playwright test --config=playwright.prod.config.ts",
+    "test:uat": "playwright test --config=playwright.uat.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0"
+  }
+}
