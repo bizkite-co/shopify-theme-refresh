@@ -84,18 +84,23 @@ def get_secret(token_ref: str) -> str:
 
 
 def load_env():
-    """Load environment based on current git branch."""
+    """Load environment based on current git branch, or SHOPIFY_ENV override."""
     import subprocess
 
-    try:
-        branch = subprocess.check_output(
-            ["git", "branch", "--show-current"], text=True
-        ).strip()
-    except:
-        branch = "unknown"
+    # Allow override via environment variable
+    env_override = os.environ.get("SHOPIFY_ENV")
+    if env_override:
+        branch = env_override
+    else:
+        try:
+            branch = subprocess.check_output(
+                ["git", "branch", "--show-current"], text=True
+            ).strip()
+        except:
+            branch = "unknown"
 
     env_file = None
-    if branch == "main" and Path("prod.env").exists():
+    if branch in ("main", "prod") and Path("prod.env").exists():
         env_file = "prod.env"
     elif branch == "uat" and Path("uat.env").exists():
         env_file = "uat.env"
@@ -228,16 +233,14 @@ class ShopifyFilesClient:
             print(f"    Error downloading {url}: {e}")
             return False
 
-    def staged_upload_create(
-        self, filename: str, mime_type: str, resource: str = "FILE"
-    ) -> dict:
+    def staged_upload_create(self, filename: str, mime_type: str) -> dict:
         """Create a staged upload URL for file upload."""
         query = """
         mutation($input: [StagedUploadInput!]!) {
             stagedUploadsCreate(input: $input) {
                 stagedTargets {
                     url
-                    resource
+                    resourceUrl
                     parameters {
                         name
                         value
@@ -256,7 +259,8 @@ class ShopifyFilesClient:
                 {
                     "filename": filename,
                     "mimeType": mime_type,
-                    "resource": resource,
+                    "httpMethod": "POST",
+                    "resource": "FILE",
                 }
             ]
         }
@@ -282,7 +286,7 @@ class ShopifyFilesClient:
         return None
 
     def file_create_from_staged_upload(
-        self, staged_upload: dict, alt: str = None
+        self, staged_upload: dict, content_type: str = "IMAGE", alt: str = None
     ) -> dict:
         """Create a file from a staged upload."""
         query = """
@@ -306,10 +310,8 @@ class ShopifyFilesClient:
         """
 
         file_input = {
-            "originalSource": {
-                "source": "STAGED_UPLOAD",
-                "stagedUploadUrl": staged_upload["url"],
-            }
+            "originalSource": staged_upload.get("resourceUrl"),
+            "contentType": content_type,
         }
 
         if alt:
@@ -351,14 +353,27 @@ class ShopifyFilesClient:
             ".webm": "video/webm",
         }
 
+        content_types = {
+            ".jpg": "IMAGE",
+            ".jpeg": "IMAGE",
+            ".png": "IMAGE",
+            ".gif": "IMAGE",
+            ".webp": "IMAGE",
+            ".svg": "IMAGE",
+            ".pdf": "GENERIC_FILE",
+            ".mp4": "VIDEO",
+            ".webm": "VIDEO",
+        }
+
         ext = file_path.suffix.lower()
         mime_type = mime_types.get(ext, "application/octet-stream")
+        content_type = content_types.get(ext, "IMAGE")
 
         staged_upload = self.staged_upload_create(file_path.name, mime_type)
         if not staged_upload:
             return False
 
-        upload_url = staged_upload["url"]
+        upload_url = staged_upload.get("url")
         params = {p["name"]: p["value"] for p in staged_upload.get("parameters", [])}
 
         try:
@@ -389,14 +404,17 @@ class ShopifyFilesClient:
                 headers={
                     "Content-Type": f"multipart/form-data; boundary={boundary}",
                 },
+                method="POST",
             )
 
             with urllib.request.urlopen(req, timeout=60) as response:
                 if response.status >= 400:
-                    print(f"    Upload failed: {response.status}")
+                    print(f"    Upload to staged target failed: {response.status}")
                     return False
 
-            result = self.file_create_from_staged_upload(staged_upload, alt)
+            result = self.file_create_from_staged_upload(
+                staged_upload, content_type, alt
+            )
             return result is not None
 
         except Exception as e:

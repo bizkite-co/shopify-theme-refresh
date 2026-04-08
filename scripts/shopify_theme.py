@@ -7,6 +7,7 @@ Usage:
     python scripts/shopify_theme.py pull                    # Pull current theme files
     python scripts/shopify_theme.py push                    # Push files to current theme
     python scripts/shopify_theme.py create "My Theme"       # Create new unpublished theme
+    python scripts/shopify_theme.py duplicate 123 "Name"    # Duplicate existing theme
 
 Environment:
     - SHOPIFY_SHOP: Shop domain (e.g., turboship-uat.myshopify.com)
@@ -92,18 +93,23 @@ def get_secret(token_ref: str) -> str:
 
 
 def load_env():
-    """Load environment based on current git branch."""
+    """Load environment based on current git branch, or SHOPIFY_ENV override."""
     import subprocess
 
-    try:
-        branch = subprocess.check_output(
-            ["git", "branch", "--show-current"], text=True
-        ).strip()
-    except:
-        branch = "unknown"
+    # Allow override via environment variable
+    env_override = os.environ.get("SHOPIFY_ENV")
+    if env_override:
+        branch = env_override
+    else:
+        try:
+            branch = subprocess.check_output(
+                ["git", "branch", "--show-current"], text=True
+            ).strip()
+        except:
+            branch = "unknown"
 
     env_file = None
-    if branch == "main" and Path("prod.env").exists():
+    if branch in ("main", "prod") and Path("prod.env").exists():
         env_file = "prod.env"
     elif branch == "uat" and Path("uat.env").exists():
         env_file = "uat.env"
@@ -154,6 +160,58 @@ class ShopifyThemeClient:
         response = requests.post(url, headers=self.headers, json=payload)
         response.raise_for_status()
         return response.json().get("theme", {})
+
+    def duplicate_theme(self, source_theme_id: int, name: str) -> dict:
+        """Duplicate an existing theme."""
+        import urllib.request
+        import json
+
+        query = """
+        mutation themeDuplicate($id: ID!, $name: String) {
+            themeDuplicate(id: $id, name: $name) {
+                newTheme {
+                    id
+                    name
+                    role
+                }
+                userErrors {
+                    field
+                    message
+                }
+            }
+        }
+        """
+
+        variables = {
+            "id": f"gid://shopify/OnlineStoreTheme/{source_theme_id}",
+            "name": name,
+        }
+
+        payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+        url = f"{self.base_url}/graphql.json"
+        headers = {
+            "X-Shopify-Access-Token": self.token,
+            "Content-Type": "application/json",
+        }
+
+        req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+        with urllib.request.urlopen(req) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        if "errors" in result:
+            raise Exception(f"GraphQL errors: {result['errors']}")
+
+        data = result.get("data", {}).get("themeDuplicate", {})
+        user_errors = data.get("userErrors", [])
+        if user_errors:
+            raise Exception(f"User errors: {user_errors}")
+
+        theme = data.get("newTheme", {})
+        return {
+            "id": theme.get("id", "").split("/")[-1],
+            "name": theme.get("name"),
+            "role": theme.get("role"),
+        }
 
     def list_assets(self, theme_id: int) -> list:
         """List all assets in a theme."""
@@ -306,6 +364,7 @@ def main():
             "  push [theme_id] [input_dir]   Push theme files (default: theme_id from env)"
         )
         print("  create <name>                  Create new unpublished theme")
+        print("  duplicate <source_id> <name>  Duplicate an existing theme")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -375,6 +434,22 @@ def main():
             sys.exit(1)
         name = sys.argv[2]
         cmd_create(client, name)
+
+    elif command == "duplicate":
+        if len(sys.argv) < 4:
+            print("Error: Source theme ID and name required")
+            print(
+                "Usage: python scripts/shopify_theme.py duplicate <source_theme_id> <new_name>"
+            )
+            sys.exit(1)
+        source_id = int(sys.argv[2])
+        name = sys.argv[3]
+        print(f"Duplicating theme {source_id} as '{name}'...\n")
+        result = client.duplicate_theme(source_id, name)
+        print(f"Created theme:")
+        print(f"  ID: {result['id']}")
+        print(f"  Name: {result['name']}")
+        print(f"  Role: {result['role']}")
 
     else:
         print(f"Unknown command: {command}")

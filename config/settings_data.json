@@ -131,18 +131,25 @@
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
-        "settings": { "color_scheme": "inverse" }
+        "settings": {
+          "color_scheme": "inverse"
+        }
       },
       "main-password-footer": {
         "type": "main-password-footer",
-        "settings": { "color_scheme": "inverse" }
+        "settings": {
+          "color_scheme": "inverse"
+        }
       },
       "wsg-custom-fields": {
         "type": "wsg-custom-fields",
         "blocks": {
           "33d01ef9-302a-41da-9e82-aa20956c0c13": {
             "type": "text_block",
-            "settings": { "text_input": "Website", "isRequired": false }
+            "settings": {
+              "text_input": "Website",
+              "isRequired": false
+            }
           },
           "ff8cd25a-11e1-4257-baa4-fdf11874553a": {
             "type": "phone_block",
@@ -331,14 +338,17 @@
       "sections": {
         "main-password-header": {
           "type": "main-password-header",
-          "settings": { "color_scheme": "inverse" }
+          "settings": {
+            "color_scheme": "inverse"
+          }
         },
         "main-password-footer": {
           "type": "main-password-footer",
-          "settings": { "color_scheme": "inverse" }
+          "settings": {
+            "color_scheme": "inverse"
+          }
         }
       }
     }
   }
 }
-

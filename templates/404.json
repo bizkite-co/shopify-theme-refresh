@@ -1,1 +1,47 @@
-{"sections":{"17643102668856d892":{"type":"_blocks","blocks":{"ai_gen_block_8a6c750_6rMJxF":{"type":"ai_gen_block_8a6c750","settings":{"heading":"Looks like that link didn’t make the cut.","message":"<p>Check the pages below—“Vinyl & Linoleum” has everything, and “Featured” shows our top tools.<\/p><p>email us at info@turboheatweldingtools.com if you have any questions.<\/p>","button_text":"Return to home","collection_1":"vinyl-flooring-tools","collection_2":"blades-and-accessories","collection_3":"featured","heading_size":48,"text_size":16,"heading_color":"#000000","text_color":"#000000","card_background":"#ffffff","card_border_color":"#e5e5e5","card_text_color":"#000000","card_border_radius":18,"image_border_radius":12,"button_background":"#dd1d1d","button_hover_background":"#000000","button_text_color":"#ffffff","button_border_radius":40},"blocks":{}}},"block_order":["ai_gen_block_8a6c750_6rMJxF"],"settings":{}},"main":{"type":"main-404","disabled":true,"settings":{}}},"order":["17643102668856d892","main"]}
+{
+  "sections": {
+    "17643102668856d892": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8a6c750_6rMJxF": {
+          "type": "ai_gen_block_8a6c750",
+          "settings": {
+            "heading": "Looks like that link didn’t make the cut.",
+            "message": "<p>Check the pages below—“Vinyl & Linoleum” has everything, and “Featured” shows our top tools.<\/p><p>email us at info@turboheatweldingtools.com if you have any questions.<\/p>",
+            "button_text": "Return to home",
+            "collection_1": "vinyl-flooring-tools",
+            "collection_2": "blades-and-accessories",
+            "collection_3": "featured",
+            "heading_size": 48,
+            "text_size": 16,
+            "heading_color": "#000000",
+            "text_color": "#000000",
+            "card_background": "#ffffff",
+            "card_border_color": "#e5e5e5",
+            "card_text_color": "#000000",
+            "card_border_radius": 18,
+            "image_border_radius": 12,
+            "button_background": "#dd1d1d",
+            "button_hover_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_border_radius": 40
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8a6c750_6rMJxF"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-404",
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "17643102668856d892",
+    "main"
+  ]
+}
