@@ -1,0 +1,9 @@
+[project]
+name = "shopify-theme-deploy"
+version = "0.1.0"
+description = "Shopify theme deployment scripts with 1Password integration"
+requires-python = ">=3.11"
+dependencies = [
+    "1password-sdk>=1.0.0",
+    "requests>=2.31.0",
+]

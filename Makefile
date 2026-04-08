@@ -6,10 +6,11 @@ help: ## Display this help screen
 	@echo "  Environment:"
 	@echo "    env-info           Show current environment info (auto-detects based on branch)"
 	@echo ""
-	@echo "  Theme Operations:"
-	@echo "    pull               Pull theme from current environment (auto-detects based on branch)"
-	@echo "    push               Push theme to current environment (auto-detects based on branch)"
-	@echo "    push-unpublished   Push as new unpublished theme (prompts for name)"
+	@echo "  Theme Operations (Python SDK - no interactive login required):"
+	@echo "    list-themes        List all themes in current environment"
+	@echo "    pull               Pull theme files from current environment"
+	@echo "    push               Push theme files to current environment"
+	@echo "    create-theme       Create new unpublished theme (usage: make create-theme NAME=\"My Theme\")"
 	@echo "    publish            Publish current theme to make it live"
 	@echo ""
 	@echo "  Page Operations:"
@@ -27,23 +28,24 @@ env-info: ## Show current environment info (auto-detects based on branch)
 	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Current branch: $$(git branch --show-current)" && echo "SHOPIFY_SHOP: $${SHOPIFY_SHOP:-<not set>}" && echo "SHOPIFY_THEME_ID: $${SHOPIFY_THEME_ID:-<not set>}"'
 
 # ==============================================================================
-# Theme Operations (auto-detect environment based on branch)
+# Theme Operations (Python SDK - no interactive login)
 # ==============================================================================
 
-pull: ## Pull theme from current environment (auto-detects based on branch)
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pulling from $$SHOPIFY_SHOP..." && npx shopify theme pull --store=$$SHOPIFY_SHOP'
+list-themes: ## List all themes in current environment
+	@mise exec -- python scripts/shopify_theme.py list
 
-push: ## Push theme to current environment (auto-detects based on branch)
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pushing to $$SHOPIFY_SHOP (theme: $$SHOPIFY_THEME_ID)..." && npx shopify theme push --store=$$SHOPIFY_SHOP --theme=$$SHOPIFY_THEME_ID'
+pull: ## Pull theme files from current environment
+	@mise exec -- python scripts/shopify_theme.py pull
 
-push-unpublished: ## Push as new unpublished theme (prompts for name)
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pushing as new unpublished theme to $$SHOPIFY_SHOP..." && npx shopify theme push --store=$$SHOPIFY_SHOP --unpublished'
+push: ## Push theme files to current environment
+	@mise exec -- python scripts/shopify_theme.py push
 
-push-named: ## Push as new unpublished theme with name (usage: make push-named NAME="my-theme")
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Pushing as $$NAME to $$SHOPIFY_SHOP..." && npx shopify theme push --store=$$SHOPIFY_SHOP --unpublished --name="$${NAME:-preview-theme}"'
+create-theme: ## Create new unpublished theme (usage: make create-theme NAME="My Theme")
+	@mise exec -- python scripts/shopify_theme.py create "$${NAME:-New Theme}"
 
 publish: ## Publish current theme to make it live
-	@bash -c 'source <(direnv export bash 2>/dev/null) && echo "Publishing theme on $$SHOPIFY_SHOP..." && npx shopify theme publish --store=$$SHOPIFY_SHOP'
+	@echo "Publishing theme via Shopify CLI..."
+	@bash -c 'source <(direnv export bash 2>/dev/null) && npx shopify theme publish --store=$$SHOPIFY_SHOP'
 
 # ==============================================================================
 # Page Operations (Python script with 1Password SDK)
@@ -63,4 +65,4 @@ branch-status: ## Show git status and current branch
 	@echo "Current branch: $$(git branch --show-current)"
 	@git status --short
 
-.PHONY: help env-info pull push push-unpublished push-named publish create-page create-address-update-page branch-status
+.PHONY: help env-info list-themes pull push create-theme publish create-page create-address-update-page branch-status
