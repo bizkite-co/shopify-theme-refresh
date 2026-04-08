@@ -243,6 +243,11 @@
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get('order');
     const hash = params.get('hash');
+    const payload = params.get('payload');
+    
+    // Turboship API endpoints (UAT)
+    const VALIDATE_ENDPOINT = 'https://api-uat.turboheat.net/uat/validate-address-hash';
+    const UPDATE_ENDPOINT = 'https://api-uat.turboheat.net/uat/update-order-address';
     
     const messagesDiv = document.getElementById('address-update-messages');
     const errorMessage = document.getElementById('error-message');
@@ -285,10 +290,12 @@
       return parts.join('<br>');
     }
     
-    function populateForm(address) {
-      document.getElementById('order_id').value = orderId;
+    function populateForm(order) {
+      document.getElementById('order_id').value = order.id;
       document.getElementById('hash').value = hash;
-      document.getElementById('order-number').textContent = '#' + orderId;
+      document.getElementById('order-number').textContent = '#' + order.order_number;
+      
+      const address = order.shipping_address || {};
       document.getElementById('current-address-display').innerHTML = formatAddress(address);
       
       if (address.first_name) document.getElementById('AddressFirstName').value = address.first_name;
@@ -301,20 +308,42 @@
       if (address.phone) document.getElementById('AddressPhone').value = address.phone;
       
       const countrySelect = document.getElementById('AddressCountry');
-      const defaultCountry = address.country || 'United States';
+      const defaultCountry = address.country || 'US';
       
-      const countries = [
-        'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France',
-        'Spain', 'Italy', 'Netherlands', 'Belgium', 'Austria', 'Switzerland',
-        'Sweden', 'Norway', 'Denmark', 'Finland', 'Ireland', 'Portugal',
-        'Mexico', 'Japan', 'China', 'India', 'Brazil', 'Argentina'
-      ];
+      const countryMap = {
+        'US': 'United States',
+        'CA': 'Canada',
+        'GB': 'United Kingdom',
+        'AU': 'Australia',
+        'DE': 'Germany',
+        'FR': 'France',
+        'ES': 'Spain',
+        'IT': 'Italy',
+        'NL': 'Netherlands',
+        'BE': 'Belgium',
+        'AT': 'Austria',
+        'CH': 'Switzerland',
+        'SE': 'Sweden',
+        'NO': 'Norway',
+        'DK': 'Denmark',
+        'FI': 'Finland',
+        'IE': 'Ireland',
+        'PT': 'Portugal',
+        'MX': 'Mexico',
+        'JP': 'Japan',
+        'CN': 'China',
+        'IN': 'India',
+        'BR': 'Brazil',
+        'AR': 'Argentina'
+      };
+      
+      const countries = Object.values(countryMap);
       
       countries.forEach(country => {
         const option = document.createElement('option');
-        option.value = country;
+        option.value = Object.keys(countryMap).find(key => countryMap[key] === country);
         option.textContent = country;
-        if (country === defaultCountry) option.selected = true;
+        if (countryMap[defaultCountry] === country) option.selected = true;
         countrySelect.appendChild(option);
       });
     }
@@ -327,26 +356,36 @@
       }
       
       try {
-        const response = await fetch('/apps/turboship/validate-address-hash', {
+        const requestBody = {
+          orderId: parseInt(orderId),
+          hash: hash
+        };
+        
+        // Add payload if provided in URL
+        if (payload) {
+          requestBody.payload = payload;
+        }
+        
+        const response = await fetch(VALIDATE_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ orderId: parseInt(orderId), hash: hash })
+          body: JSON.stringify(requestBody)
         });
         
         const data = await response.json();
         
         if (!response.ok) {
-          showError(data.error || 'Unable to validate your request. The link may have expired.');
+          showError(data.error || data.message || 'Unable to validate your request. The link may have expired.');
           return;
         }
         
         if (data.valid && data.order) {
-          populateForm(data.order.shipping_address);
+          populateForm(data.order);
           showForm();
         } else {
-          showError('Invalid or expired link. Please contact support.');
+          showError(data.error || 'Invalid or expired link. Please contact support.');
         }
       } catch (error) {
         console.error('Error validating hash:', error);
@@ -379,28 +418,40 @@
       };
       
       try {
-        const response = await fetch('/apps/turboship/update-order-address', {
+        const requestBody = {
+          orderId: parseInt(orderId),
+          hash: hash,
+          address: address
+        };
+        
+        if (payload) {
+          requestBody.payload = payload;
+        }
+        
+        const response = await fetch(UPDATE_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            orderId: parseInt(orderId),
-            hash: hash,
-            address: address
-          })
+          body: JSON.stringify(requestBody)
         });
         
         const data = await response.json();
         
         if (!response.ok) {
-          showError(data.error || 'Unable to update address. Please try again.');
+          showError(data.error || data.message || 'Unable to update address. Please try again.');
           submitButton.disabled = false;
           submitSpinner.style.display = 'none';
           return;
         }
         
-        showSuccess('Your address has been updated successfully! We will reprocess your order and send you a confirmation email shortly.');
+        if (data.success) {
+          showSuccess(data.message || 'Your address has been updated successfully! We will reprocess your order and send you a confirmation email shortly.');
+        } else {
+          showError(data.message || 'Unable to update address. Please try again.');
+          submitButton.disabled = false;
+          submitSpinner.style.display = 'none';
+        }
         
       } catch (error) {
         console.error('Error updating address:', error);
