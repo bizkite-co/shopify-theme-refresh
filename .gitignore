@@ -7,6 +7,9 @@ example.envrc
 # Downloaded theme ZIP files
 *.zip
 
+# Downloaded Shopify Files (images)
+files/
+
 # IDE and OS files
 .DS_Store
 *.swp
