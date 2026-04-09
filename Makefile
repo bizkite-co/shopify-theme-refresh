@@ -75,13 +75,16 @@ test-endpoints: ## Run simple curl tests (usage: make test-endpoints ENV=uat|pro
 	@bash tests/test-endpoints.sh $(ENV)
 
 test: ## Run Playwright tests on UAT
-	@SHOPIFY_ENV=uat npx playwright test --config=playwright.uat.config.ts
+	@SHOPIFY_ENV=uat npx playwright test
 
-test:prod: ## Run Playwright tests against PROD
+test-prod: ## Run Playwright tests against PROD
 	@SHOPIFY_ENV=prod npx playwright test --config=playwright.prod.config.ts
 
-test:uat: ## Run Playwright tests against UAT
+test-uat: ## Run Playwright tests against UAT
 	@SHOPIFY_ENV=uat npx playwright test --config=playwright.uat.config.ts
+
+test-comparison: ## Test UAT-on-PROD theme for apples-to-apples comparison
+	@npx playwright test tests/uat-on-prod.spec.ts --project=chromium
 
 # ==============================================================================
 # Git Operations
@@ -91,4 +94,4 @@ branch-status: ## Show git status and current branch
 	@echo "Current branch: $$(git branch --show-current)"
 	@git status --short
 
-.PHONY: help env-info list-themes pull push create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status
+.PHONY: help env-info list-themes pull push create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status test test-endpoints test-prod test-uat test-comparison
