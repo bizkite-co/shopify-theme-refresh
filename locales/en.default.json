@@ -369,6 +369,12 @@
       "delete": "Delete",
       "delete_confirm": "Are you sure you wish to delete this address?"
     },
+    "address_update": {
+      "title": "Help us send your package to you",
+      "current_address": "Original order address info",
+      "order_number": "Shopify Order Number",
+      "submit": "Save updated address"
+    },
     "log_in": "Log in",
     "log_out": "Log out",
     "login_page": {

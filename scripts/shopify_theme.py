@@ -6,6 +6,7 @@ Usage:
     python scripts/shopify_theme.py list                    # List all themes
     python scripts/shopify_theme.py pull                    # Pull current theme files
     python scripts/shopify_theme.py push                    # Push files to current theme
+    python scripts/shopify_theme.py put <file> [theme_id]  # Push single file to theme
     python scripts/shopify_theme.py create "My Theme"       # Create new unpublished theme
     python scripts/shopify_theme.py duplicate 123 "Name"    # Duplicate existing theme
 
@@ -450,6 +451,38 @@ def main():
         print(f"  ID: {result['id']}")
         print(f"  Name: {result['name']}")
         print(f"  Role: {result['role']}")
+
+    elif command == "put":
+        if len(sys.argv) < 3:
+            print("Error: File path required")
+            print("Usage: python scripts/shopify_theme.py put <file_path> [theme_id]")
+            sys.exit(1)
+        file_path = sys.argv[2]
+        tid = (
+            int(sys.argv[3])
+            if len(sys.argv) > 3
+            else int(theme_id)
+            if theme_id
+            else None
+        )
+        if not tid:
+            print("Error: No theme ID specified and SHOPIFY_THEME_ID not set")
+            sys.exit(1)
+
+        path = Path(file_path)
+        if not path.exists():
+            print(f"Error: File not found: {file_path}")
+            sys.exit(1)
+
+        print(f"Pushing {file_path} to theme {tid}...")
+
+        if path.suffix in [".png", ".jpg", ".gif", ".ico"]:
+            content = base64.b64encode(path.read_bytes()).decode()
+            client.put_asset(tid, file_path, attachment=content)
+        else:
+            client.put_asset(tid, file_path, content=path.read_text())
+
+        print(f"Pushed {file_path} successfully")
 
     else:
         print(f"Unknown command: {command}")

@@ -31,6 +31,9 @@ pull: ## Pull theme files from current environment
 push: ## Push theme files to current environment
 	@SHOPIFY_ENV=$(ENV) mise exec -- python scripts/shopify_theme.py push
 
+put-file: ## Push single file to theme (usage: make put-file FILE=locales/en.default.json THEME_ID=125943676989)
+	@SHOPIFY_ENV=$(ENV) mise exec -- python scripts/shopify_theme.py put "$${FILE}" "$${THEME_ID}"
+
 create-theme: ## Create new unpublished theme (usage: make create-theme NAME="My Theme")
 	@SHOPIFY_ENV=$(ENV) mise exec -- python scripts/shopify_theme.py create "$${NAME:-New Theme}"
 
@@ -94,4 +97,4 @@ branch-status: ## Show git status and current branch
 	@echo "Current branch: $$(git branch --show-current)"
 	@git status --short
 
-.PHONY: help env-info list-themes pull push create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status test test-endpoints test-prod test-uat test-comparison
+.PHONY: help env-info list-themes pull push put-file create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status test test-endpoints test-prod test-uat test-comparison
