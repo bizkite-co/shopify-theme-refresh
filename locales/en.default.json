@@ -373,6 +373,7 @@
       "title": "Help us send your package to you",
       "current_address": "Original order address info",
       "order_number": "Shopify Order Number",
+      "loading": "Loading order information...",
       "submit": "Save updated address"
     },
     "log_in": "Log in",
