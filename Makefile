@@ -25,6 +25,9 @@ ENV := $(shell echo "${SHOPIFY_ENV}")
 list-themes: ## List all themes in current environment
 	@SHOPIFY_ENV=$(ENV) mise exec -- python scripts/shopify_theme.py list
 
+list-themes-detailed: ## List all themes with roles (shows LIVE theme)
+	@SHOPIFY_SHOP=$${SHOPIFY_SHOP:-turboship-uat.myshopify.com} _OVERRIDE_SHOP=$$SHOPIFY_SHOP SHOPIFY_ENV=$(ENV) mise exec -- python scripts/list_themes.py
+
 pull: ## Pull theme files from current environment
 	@SHOPIFY_ENV=$(ENV) mise exec -- python scripts/shopify_theme.py pull
 
@@ -97,4 +100,4 @@ branch-status: ## Show git status and current branch
 	@echo "Current branch: $$(git branch --show-current)"
 	@git status --short
 
-.PHONY: help env-info list-themes pull push put-file create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status test test-endpoints test-prod test-uat test-comparison
+.PHONY: help env-info list-themes list-themes-detailed pull push put-file create-theme duplicate-theme publish list-files pull-files push-files create-page create-address-update-page branch-status test test-endpoints test-prod test-uat test-comparison
