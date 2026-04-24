@@ -118,12 +118,12 @@
           id="AddressCountry"
           name="address[country]"
           autocomplete="country"
-          placeholder="{{ 'customer.addresses.country' | t }}"
           required
         >
-          <option value="" disabled selected>{{ 'customer.addresses.country' | t }}</option>
+          <!-- TEMPORARY: Only supporting US domestic orders for now -->
+          <option value="US" selected>United States</option>
         </select>
-        <label for="AddressCountry">{{ 'customer.addresses.country' | t }}</label>
+        <label for="AddressCountry">Country/region</label>
       </div>
       
       <div class="field">
@@ -330,7 +330,8 @@
       
       document.getElementById('AddressProvince').value = stateCode;
       
-      // Set country to US (domestic orders only)
+      // TEMPORARY: Hardcoded to US - only supporting domestic orders for now
+      // TODO: Remove this when international support is added
       document.getElementById('AddressCountry').value = 'US';
     }
     
