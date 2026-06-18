@@ -422,16 +422,61 @@
           },
           body: JSON.stringify(requestBody)
         });
-        
+
         const data = await response.json();
-        
+
+        // Handle validation errors (422) - show error but keep form visible for retry
+        if (response.status === 422) {
+          messagesDiv.style.display = 'block';
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = data.message || 'Address validation failed. Please verify the details and try again.';
+          successMessage.style.display = 'none';
+          formContainer.style.display = 'block'; // Keep form visible for retry
+          submitButton.disabled = false;
+          submitSpinner.style.display = 'none';
+
+          // Repopulate form with the submitted address so user can edit it
+          if (data.address) {
+            document.getElementById('AddressFirstName').value = data.address.first_name || '';
+            document.getElementById('AddressLastName').value = data.address.last_name || '';
+            document.getElementById('AddressCompany').value = data.address.company || '';
+            document.getElementById('AddressAddress1').value = data.address.address1 || '';
+            document.getElementById('AddressAddress2').value = data.address.address2 || '';
+            document.getElementById('AddressCity').value = data.address.city || '';
+            document.getElementById('AddressZip').value = data.address.zip || '';
+            document.getElementById('AddressPhone').value = data.address.phone || '';
+
+            // Convert state name to code if needed
+            const stateCodeMap = {
+              'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
+              'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
+              'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+              'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+              'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
+              'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+              'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+              'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+              'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
+              'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY',
+              'District of Columbia': 'DC', 'Washington DC': 'DC', 'Washington D.C.': 'DC'
+            };
+            let stateCode = data.address.province || '';
+            if (stateCode && stateCodeMap[stateCode]) {
+              stateCode = stateCodeMap[stateCode];
+            }
+            document.getElementById('AddressProvince').value = stateCode;
+            document.getElementById('AddressCountry').value = data.address.country === 'US' ? 'US' : 'US';
+          }
+          return;
+        }
+
         if (!response.ok) {
           showError(data.error || data.message || 'Unable to update address. Please try again.');
           submitButton.disabled = false;
           submitSpinner.style.display = 'none';
           return;
         }
-        
+
         if (data.success) {
           showSuccess(data.message || 'Your address has been updated successfully! We will reprocess your order and send you a confirmation email shortly.');
         } else {
